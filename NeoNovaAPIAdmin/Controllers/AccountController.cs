@@ -35,7 +35,7 @@ namespace NeoNovaAPIAdmin.Controllers
         {
             var httpClient = _httpClientFactory.CreateClient("apiClient");
 
-            var response = await httpClient.PostAsJsonAsync("https://novaapp-2023.azurewebsites.net/api/auth/login", adminUser);
+            var response = await httpClient.PostAsJsonAsync("/api/auth/login", adminUser);
 
             if (response.IsSuccessStatusCode)
             {
@@ -50,6 +50,7 @@ namespace NeoNovaAPIAdmin.Controllers
             }
             return RedirectToAction("LoginPage", "Account");
         }
+
         [AllowAnonymous]
         public IActionResult Logout()
         {
