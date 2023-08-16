@@ -1,0 +1,96 @@
+﻿@using NeoNovaAPIAdmin.Models.DbModels;
+@{
+
+}
+
+@model List<Faq>
+
+<div class="text-center">
+    <h1 class="display-4">FAQs Page</h1>
+    <p>These are the Faqs</p>
+    <button class="btn btn-success newButton" data-form="newForm">New +</button>
+</div>
+<div id="newFormDiv">
+    <form id="newForm" class="newForm" action="@Url.Action("AddFaq")" method="post" style="display: none;">
+        <table>
+            <tr>
+                <td><input type="text" name="Question" placeholder="Question" required /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="Answer" placeholder="Answer" required /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="State" placeholder="State" required /></td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" name="IsPinned" /> Is Pinned</td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="button" class="btn btn-danger cancelButton">Cancel</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table" id="faqsTable">
+        <thead>
+            <tr>
+                <th>Question</th>
+                <th>Answer</th>
+                <th>State</th>
+                <th>Is Pinned</th>
+                <th style="min-width: 300px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var faq in Model)
+            {
+                <form action="@Url.Action("PutFaq", new { id = faq.Id })" method="post">
+                <tr>
+                    <input type="hidden" name="Id" value="@faq.Id" />
+                    <td>
+                        <span class="text">@faq.Question</span>
+                        <textarea name="Question" class="form-control edit" style="display:none;">@faq.Question</textarea>
+                    </td>
+                    <td>
+                        <span class="text">@faq.Answer</span>
+                        <textarea name="Answer" class="form-control edit" style="display:none;">@faq.Answer</textarea>
+                    </td>
+                    <td>
+                        <span class="text">@faq.State</span>
+                        <input type="text" name="State" class="form-control edit" value="@faq.State" style="display:none;" />
+                    </td>
+                    <td>
+                        <span class="text">@faq.IsPinned</span>
+                        <input type="checkbox" name="IsPinned" class="form-control edit" @(faq.IsPinned ? "checked" : "") style="display:none;" />
+                    </td>
+
+                    <td>
+                        <div class="action-buttons">
+                            <div class="button-row">
+                                <button type="button" class="btn btn-primary editBtn">Edit</button>
+                            </div>
+                            <div class="edit-actions button-row" style="display:none;">
+                                <button type="submit" class="btn btn-success saveBtn">Save</button>
+                                <button type="button" class="btn btn-danger cancelBtn">Cancel</button>
+                            </div>
+                            <div class="button-row">
+                                <button type="button" class="btn btn-danger deleteBtn" data-url="@Url.Action("DeleteFaq", new { id = faq.Id })">Delete</button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </form>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No FAQs found.</p>
+}

@@ -1,0 +1,14 @@
+﻿@model dynamic
+
+<form id="newForm" class="newForm" action="@Url.Action(ViewBag.AddAction)" method="post" style="display: none;">
+    @foreach (var field in ViewBag.Fields)
+    {
+        <input type="@field["Type"]" name="@field["Name"]" placeholder="@field["Placeholder"]" @(field["Required"] ? "required" : "") />
+        if (@field["Type"] == "checkbox")
+        {
+            <label>@field["Label"]</label>
+        }
+    }
+    <button type="submit" class="btn btn-primary">Add</button>
+    <button type="button" class="btn btn-danger cancelButton">Cancel</button>
+</form>

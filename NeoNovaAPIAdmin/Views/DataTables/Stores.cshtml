@@ -1,0 +1,177 @@
+﻿@using NeoNovaAPIAdmin.Models.DbModels;
+@{
+}
+
+@model List<Store>
+
+<div class="text-center">
+    <h1 class="display-4">Stores Page</h1>
+    <p>These are the Stores</p>
+    <button class="btn btn-success newButton" data-form="newForm">New +</button>
+</div>
+<div id="newFormDiv">
+    <form id="newForm" class="newForm" action="@Url.Action("AddStore")" method="post" style="display: none;">
+        <table>
+            <tr>
+                <td><input type="text" name="Name" placeholder="Name" required /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="SubName" placeholder="Sub Name" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="RegistrationType" placeholder="Registration Type" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="Address" placeholder="Address" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="City" placeholder="City" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="State" placeholder="State" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="ZipCode" placeholder="Zip Code" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="Country" placeholder="Country" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="Email" placeholder="Email" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="Phone" placeholder="Phone" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="Hours" placeholder="Hours" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="Longitude" placeholder="Longitude" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="Latitude" placeholder="Latitude" /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="Directions" placeholder="Directions" /></td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="button" class="btn btn-danger cancelButton">Cancel</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+
+
+@if (Model != null && Model.Any())
+{
+    <table class="table" id="storesTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>SubName</th>
+                <th>Registration Type</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zip Code</th>
+                <th>Country</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Hours</th>
+                <th>Longitude</th>
+                <th>Latitude</th>
+                <th>Directions</th>
+                <th style="min-width: 300px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            @foreach (var store in Model)
+            {
+                <form action="@Url.Action("PutStore", new { id = store.Id })" method="post">
+                    <tr>
+                        <input type="hidden" name="Id" value="@store.Id" />
+                        <td>
+                            <span class="text">@store.Name</span>
+                            <input type="text" name="Name" class="form-control edit" value="@store.Name" style="display:none;" />
+                        </td>
+                        <td>
+                            <span class="text">@store.SubName</span>
+                            <input type="text" name="SubName" class="form-control edit" value="@store.SubName" style="display:none;" />
+                        </td>
+                        <td>
+                            <span class="text">@store.RegistrationType</span>
+                            <input type="text" name="RegistrationType" class="form-control edit" value="@store.RegistrationType" style="display:none;" />
+                        </td>
+                        <td>
+                            <span class="text">@store.Address</span>
+                            <input type="text" name="Address" class="form-control edit" value="@store.Address" style="display:none;" />
+                        </td>
+                        <td>
+                            <span class="text">@store.City</span>
+                            <input type="text" name="City" class="form-control edit" value="@store.City" style="display:none;" />
+                        </td>
+                        <td>
+                            <span class="text">@store.State</span>
+                            <input type="text" name="State" class="form-control edit" value="@store.State" style="display:none;" />
+                        </td>
+                        <td>
+                            <span class="text">@store.ZipCode</span>
+                            <input type="text" name="ZipCode" class="form-control edit" value="@store.ZipCode" style="display:none;" />
+                        </td>
+                        <td>
+                            <span class="text">@store.Country</span>
+                            <input type="text" name="Country" class="form-control edit" value="@store.Country" style="display:none;" />
+                        </td>
+                        <td>
+                            <span class="text">@store.Email</span>
+                            <input type="text" name="Email" class="form-control edit" value="@store.Email" style="display:none;" />
+                        </td>
+                        <td>
+                            <span class="text">@store.Phone</span>
+                            <input type="text" name="Phone" class="form-control edit" value="@store.Phone" style="display:none;" />
+                        </td>
+                        <td>
+                            <span class="text">@store.Hours</span>
+                            <input type="text" name="Hours" class="form-control edit" value="@store.Hours" style="display:none;" />
+                        </td>
+                        <td>
+                            <span class="text">@store.Longitude</span>
+                            <input type="text" name="Longitude" class="form-control edit" value="@store.Longitude" style="display:none;" />
+                        </td>
+                        <td>
+                            <span class="text">@store.Latitude</span>
+                            <input type="text" name="Latitude" class="form-control edit" value="@store.Latitude" style="display:none;" />
+                        </td>
+                        <td>
+                            <span class="text">@store.Directions</span>
+                            <input type="text" name="Directions" class="form-control edit" value="@store.Directions" style="display:none;" />
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <div class="button-row">
+                                    <button type="button" class="btn btn-primary editBtn">Edit</button>
+                                </div>
+                                <div class="edit-actions button-row" style="display:none;">
+                                    <button type="submit" class="btn btn-success saveBtn">Save</button>
+                                    <button type="button" class="btn btn-danger cancelBtn">Cancel</button>
+                                </div>
+                                <div class="button-row">
+                                    <button type="button" class="btn btn-danger deleteBtn" data-url="@Url.Action("DeleteStore", new { id = store.Id })">Delete</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </form>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No Stores found.</p>
+}

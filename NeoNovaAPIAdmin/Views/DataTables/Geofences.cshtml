@@ -1,0 +1,84 @@
+﻿@using NeoNovaAPIAdmin.Models.DbModels;
+@{
+
+}
+
+@model List<Geofence>
+
+<div class="text-center">
+    <h1 class="display-4">Geofences Page</h1>
+    <p>These are the Geofences</p>
+    <button class="btn btn-success newButton" data-form="newForm">New +</button>
+</div>
+<div id="newFormDiv">
+    <form id="newForm" class="newForm" action="@Url.Action("AddGeofence")" method="post" style="display: none;">
+        <table>
+            <tr>
+                <td><input type="text" name="Latitude" placeholder="Latitude" required /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="Longitude" placeholder="Longitude" required /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="Radius" placeholder="Radius" required /></td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="button" class="btn btn-danger cancelButton">Cancel</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table" id="geofencesTable">
+        <thead>
+            <tr>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Radius</th>
+                <th style="min-width: 300px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var geofence in Model)
+            {
+                <tr>
+                    <td>
+                        <span class="text">@geofence.Latitude</span>
+                        <input type="text" class="form-control edit" value="@geofence.Latitude" style="display:none;" />
+                    </td>
+                    <td>
+                        <span class="text">@geofence.Longitude</span>
+                        <input type="text" class="form-control edit" value="@geofence.Longitude" style="display:none;" />
+                    </td>
+                    <td>
+                        <span class="text">@geofence.Radius</span>
+                        <input type="text" class="form-control edit" value="@geofence.Radius" style="display:none;" />
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <div class="button-row">
+                                <button type="button" class="btn btn-primary editBtn">Edit</button>
+                            </div>
+                            <div class="edit-actions button-row" style="display:none;">
+                                <button type="submit" class="btn btn-success saveBtn">Save</button>
+                                <button type="button" class="btn btn-danger cancelBtn">Cancel</button>
+                            </div>
+                            <div class="button-row">
+                                <button type="button" class="btn btn-danger deleteBtn" data-url="@Url.Action("DeleteGeofence", new { id = geofence.Id })">Delete</button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No Geofences found.</p>
+}

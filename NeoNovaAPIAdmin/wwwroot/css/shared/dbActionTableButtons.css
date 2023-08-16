@@ -1,0 +1,13 @@
+﻿.action-buttons .edit-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.action-buttons .deleteBtn {
+    display: block;
+    margin-top: 5px;
+}
+
+.actions-column {
+    min-width: 150px;
+}
