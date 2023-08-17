@@ -44,7 +44,7 @@ namespace NeoNovaAPIAdmin.Controllers
                 {
                     var token = result.Token;
 
-                    Response.Cookies.Append("NeoWebAppCookie", token, new CookieOptions { HttpOnly = true, SameSite = SameSiteMode.None, Secure = true });
+                    Response.Cookies.Append("NeoWebAppCookie", token, new CookieOptions { HttpOnly = true, Secure = true });
                 }
             return RedirectToAction("AdminPortal", "Admin");
             }
