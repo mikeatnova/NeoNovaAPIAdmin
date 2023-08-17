@@ -7,19 +7,60 @@ using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Text;
+using System.Net.Http.Headers;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace NeoNovaAPIAdmin.Controllers
 {
     public class DataTablesController : CoreController
     {
+        private readonly JwtExtractorHelper _jwtExtractorHelper;
+
         public DataTablesController(JwtExtractorHelper jwtExtractorHelper)
             : base(jwtExtractorHelper) // Call the base constructor with the required parameter
         {
         }
+
+
+        // Common method to initialize HttpClient with authorization header
+        private HttpClient InitializeHttpClient()
+        {
+            var httpClient = new HttpClient();
+
+            // Retrieve the token from the cookie
+            var token = HttpContext.Request.Cookies["NeoWebAppCookie"];
+
+            if (token != null)
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            return httpClient;
+        }
+
+        private async Task<IActionResult> GetViewAsync<T>(string url)
+        {
+            using (var httpClient = InitializeHttpClient())
+            {
+                var response = await httpClient.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                    };
+                    var items = JsonSerializer.Deserialize<List<T>>(content, options);
+                    return View(items);
+                }
+            }
+            return View(new List<T>()); // Return an empty list if the request fails
+        }
+
         // FREQUENTLY ASKED QUESTIONS
 
         [HttpGet]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> Faqs()
         {
             return await GetViewAsync<Models.DbModels.Faq>("https://novaapp-2023.azurewebsites.net/api/Faqs");
@@ -30,7 +71,7 @@ namespace NeoNovaAPIAdmin.Controllers
         [Authorize]
         public async Task<IActionResult> AddFaq(Models.DbModels.Faq faq)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = InitializeHttpClient())
             {
                 var json = JsonSerializer.Serialize(faq);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -50,7 +91,7 @@ namespace NeoNovaAPIAdmin.Controllers
         [Authorize]
         public async Task<IActionResult> PutFaq(int id, Models.DbModels.Faq faq)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = InitializeHttpClient())
             {
                 var json = JsonSerializer.Serialize(faq);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -70,7 +111,7 @@ namespace NeoNovaAPIAdmin.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteFaq(int id)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = InitializeHttpClient())
             {
                 var response = await httpClient.DeleteAsync($"https://novaapp-2023.azurewebsites.net/api/Faqs/{id}");
                 if (response.IsSuccessStatusCode)
@@ -98,7 +139,7 @@ namespace NeoNovaAPIAdmin.Controllers
         [Authorize]
         public async Task<IActionResult> AddGeofence(Models.DbModels.Geofence geofence)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = InitializeHttpClient())
             {
                 var json = JsonSerializer.Serialize(geofence);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -116,7 +157,7 @@ namespace NeoNovaAPIAdmin.Controllers
         [Authorize]
         public async Task<IActionResult> PutGeofence(int id, Models.DbModels.Geofence geofence)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = InitializeHttpClient())
             {
                 var json = JsonSerializer.Serialize(geofence);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -134,7 +175,7 @@ namespace NeoNovaAPIAdmin.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteGeofence(int id)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = InitializeHttpClient())
             {
                 var response = await httpClient.DeleteAsync($"https://novaapp-2023.azurewebsites.net/api/Geofences/{id}");
                 if (response.IsSuccessStatusCode)
@@ -160,7 +201,7 @@ namespace NeoNovaAPIAdmin.Controllers
         [Authorize]
         public async Task<IActionResult> AddNovadeck(Models.DbModels.Novadeck novadeck)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = InitializeHttpClient())
             {
                 var json = JsonSerializer.Serialize(novadeck);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -178,7 +219,7 @@ namespace NeoNovaAPIAdmin.Controllers
         [Authorize]
         public async Task<IActionResult> PutNovadeck(int id, Models.DbModels.Novadeck novadeck)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = InitializeHttpClient())
             {
                 var json = JsonSerializer.Serialize(novadeck);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -196,7 +237,7 @@ namespace NeoNovaAPIAdmin.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteNovadeck(int id)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = InitializeHttpClient())
             {
                 var response = await httpClient.DeleteAsync($"https://novaapp-2023.azurewebsites.net/api/Novadecks/{id}");
                 if (response.IsSuccessStatusCode)
@@ -223,7 +264,7 @@ namespace NeoNovaAPIAdmin.Controllers
         [Authorize]
         public async Task<IActionResult> AddStore(Models.DbModels.Store store)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = InitializeHttpClient())
             {
                 var json = JsonSerializer.Serialize(store);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -241,7 +282,7 @@ namespace NeoNovaAPIAdmin.Controllers
         [Authorize]
         public async Task<IActionResult> PutStore(int id, Models.DbModels.Store store)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = InitializeHttpClient())
             {
                 var json = JsonSerializer.Serialize(store);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -259,7 +300,7 @@ namespace NeoNovaAPIAdmin.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteStore(int id)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = InitializeHttpClient())
             {
                 var response = await httpClient.DeleteAsync($"https://novaapp-2023.azurewebsites.net/api/Stores/{id}");
                 if (response.IsSuccessStatusCode)
@@ -284,7 +325,7 @@ namespace NeoNovaAPIAdmin.Controllers
         [Authorize]
         public async Task<IActionResult> AddStoreHour(Models.DbModels.StoreHour storeHour)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = InitializeHttpClient())
             {
                 var json = JsonSerializer.Serialize(storeHour);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -302,7 +343,7 @@ namespace NeoNovaAPIAdmin.Controllers
         [Authorize]
         public async Task<IActionResult> PutStoreHour(int id, Models.DbModels.StoreHour storeHour)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = InitializeHttpClient())
             {
                 var json = JsonSerializer.Serialize(storeHour);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -320,7 +361,7 @@ namespace NeoNovaAPIAdmin.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteStoreHour(int id)
         {
-            using (var httpClient = new HttpClient())
+            using (var httpClient = InitializeHttpClient())
             {
                 var response = await httpClient.DeleteAsync($"https://novaapp-2023.azurewebsites.net/api/StoreHours/{id}");
                 if (response.IsSuccessStatusCode)
@@ -332,23 +373,5 @@ namespace NeoNovaAPIAdmin.Controllers
         }
 
 
-        private async Task<IActionResult> GetViewAsync<T>(string url)
-        {
-            using (var httpClient = new HttpClient())
-            {
-                var response = await httpClient.GetAsync(url);
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var options = new JsonSerializerOptions
-                    {
-                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                    };
-                    var items = JsonSerializer.Deserialize<List<T>>(content, options);
-                    return View(items);
-                }
-            }
-            return View(new List<T>()); // Return an empty list if the request fails
-        }
     }
 }
