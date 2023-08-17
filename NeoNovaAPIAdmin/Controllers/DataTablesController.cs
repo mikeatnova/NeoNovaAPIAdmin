@@ -60,7 +60,6 @@ namespace NeoNovaAPIAdmin.Controllers
         // FREQUENTLY ASKED QUESTIONS
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> Faqs()
         {
             return await GetViewAsync<Models.DbModels.Faq>("https://novaapp-2023.azurewebsites.net/api/Faqs");
@@ -68,7 +67,6 @@ namespace NeoNovaAPIAdmin.Controllers
 
         // Add Faq
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> AddFaq(Models.DbModels.Faq faq)
         {
             using (var httpClient = InitializeHttpClient())
@@ -88,7 +86,6 @@ namespace NeoNovaAPIAdmin.Controllers
 
         // Update Faq
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> PutFaq(int id, Models.DbModels.Faq faq)
         {
             using (var httpClient = InitializeHttpClient())
@@ -108,7 +105,6 @@ namespace NeoNovaAPIAdmin.Controllers
 
         // Delete Faq
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> DeleteFaq(int id)
         {
             using (var httpClient = InitializeHttpClient())
@@ -128,7 +124,6 @@ namespace NeoNovaAPIAdmin.Controllers
         // GEOFENCES
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> Geofences()
         {
             return await GetViewAsync<Models.DbModels.Geofence>("https://novaapp-2023.azurewebsites.net/api/Geofences");
@@ -136,7 +131,6 @@ namespace NeoNovaAPIAdmin.Controllers
 
         // Add Geofence
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> AddGeofence(Models.DbModels.Geofence geofence)
         {
             using (var httpClient = InitializeHttpClient())
@@ -154,7 +148,6 @@ namespace NeoNovaAPIAdmin.Controllers
 
         // Update Geofence
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> PutGeofence(int id, Models.DbModels.Geofence geofence)
         {
             using (var httpClient = InitializeHttpClient())
@@ -172,7 +165,6 @@ namespace NeoNovaAPIAdmin.Controllers
 
         // Delete Geofence
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> DeleteGeofence(int id)
         {
             using (var httpClient = InitializeHttpClient())
@@ -190,7 +182,6 @@ namespace NeoNovaAPIAdmin.Controllers
         // NOVADECKS
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> Novadecks()
         {
             return await GetViewAsync<Models.DbModels.Novadeck>("https://novaapp-2023.azurewebsites.net/api/Novadecks");
@@ -198,7 +189,6 @@ namespace NeoNovaAPIAdmin.Controllers
 
         // Add Novadeck
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> AddNovadeck(Models.DbModels.Novadeck novadeck)
         {
             using (var httpClient = InitializeHttpClient())
@@ -216,7 +206,6 @@ namespace NeoNovaAPIAdmin.Controllers
 
         // Update Novadeck
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> PutNovadeck(int id, Models.DbModels.Novadeck novadeck)
         {
             using (var httpClient = InitializeHttpClient())
@@ -234,7 +223,6 @@ namespace NeoNovaAPIAdmin.Controllers
 
         // Delete Novadeck
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> DeleteNovadeck(int id)
         {
             using (var httpClient = InitializeHttpClient())
@@ -248,12 +236,9 @@ namespace NeoNovaAPIAdmin.Controllers
             return View("Error"); // Handle error, e.g., return a view with an error message
         }
 
-
-
         // STORES
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> Stores()
         {
             return await GetViewAsync<Models.DbModels.Store>("https://novaapp-2023.azurewebsites.net/api/Stores");
@@ -261,7 +246,6 @@ namespace NeoNovaAPIAdmin.Controllers
 
         // Add Store
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> AddStore(Models.DbModels.Store store)
         {
             using (var httpClient = InitializeHttpClient())
@@ -279,7 +263,6 @@ namespace NeoNovaAPIAdmin.Controllers
 
         // Update Store
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> PutStore(int id, Models.DbModels.Store store)
         {
             using (var httpClient = InitializeHttpClient())
@@ -297,7 +280,6 @@ namespace NeoNovaAPIAdmin.Controllers
 
         // Delete Store
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> DeleteStore(int id)
         {
             using (var httpClient = InitializeHttpClient())
@@ -314,7 +296,6 @@ namespace NeoNovaAPIAdmin.Controllers
         // STORE HOURS
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> StoreHours()
         {
             return await GetViewAsync<Models.DbModels.StoreHour>("https://novaapp-2023.azurewebsites.net/api/StoreHours");
@@ -322,7 +303,6 @@ namespace NeoNovaAPIAdmin.Controllers
 
         // Add Store Hours
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> AddStoreHour(Models.DbModels.StoreHour storeHour)
         {
             using (var httpClient = InitializeHttpClient())
@@ -340,7 +320,6 @@ namespace NeoNovaAPIAdmin.Controllers
 
         // Update Store Hours
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> PutStoreHour(int id, Models.DbModels.StoreHour storeHour)
         {
             using (var httpClient = InitializeHttpClient())
@@ -358,7 +337,6 @@ namespace NeoNovaAPIAdmin.Controllers
 
         // Delete Store Hours
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> DeleteStoreHour(int id)
         {
             using (var httpClient = InitializeHttpClient())

@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using NeoNovaAPIAdmin.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using System.Net.Http.Headers;
 
 namespace NeoNovaAPIAdmin.Controllers
 {
@@ -24,12 +25,39 @@ namespace NeoNovaAPIAdmin.Controllers
             _configuration = configuration;
         }
 
+        // Initialize HttpClient with authorization header
+
+        private HttpClient InitializeHttpClient()
+        {
+            var httpClient = new HttpClient();
+
+            // Get the base URL from the configuration
+            string baseUrl = _configuration["NeoNovaApiBaseUrl"];
+            if (!string.IsNullOrEmpty(baseUrl))
+            {
+                httpClient.BaseAddress = new Uri(baseUrl);
+            }
+
+            // Retrieve the token from the cookie
+            var token = HttpContext.Request.Cookies["NeoWebAppCookie"];
+            if (token != null)
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            return httpClient;
+        }
+
+        // LOGIN
+
+        // Load LoginPage
         [AllowAnonymous]
         public IActionResult LoginPage()
         {
             return View();
         }
 
+        // Login Api request
         [AllowAnonymous]
         public async Task<IActionResult> Login(AdminUser adminUser)
         {
@@ -51,6 +79,7 @@ namespace NeoNovaAPIAdmin.Controllers
             return RedirectToAction("LoginPage", "Account");
         }
 
+        // LOGOUT
         [AllowAnonymous]
         public IActionResult Logout()
         {
@@ -59,6 +88,48 @@ namespace NeoNovaAPIAdmin.Controllers
 
             // Redirect to the login page
             return RedirectToAction("LoginPage", "Account");
+        }
+
+        // CREATE USERS
+
+        // Load CreateUsers View
+        public IActionResult CreateUsers()
+        {
+            return View(); // You can return the view that contains the form
+        }
+
+        // Create Users Api request
+        [HttpPost]
+        public async Task<IActionResult> CreateUsers(string action)
+        {
+            using (var httpClient = InitializeHttpClient())
+            {
+                HttpResponseMessage response = null;
+
+                switch (action)
+                {
+                    case "CreateNeoUser":
+                        response = await httpClient.PostAsync("/api/auth/create-neo-user", null);
+                        break;
+                    case "CreateCommonUser":
+                        response = await httpClient.PostAsync("/api/auth/create-common-user", null);
+                        break;
+                    case "CreateAdminUser":
+                        response = await httpClient.PostAsync("/api/auth/create-admin-user", null);
+                        break;
+                }
+
+                if (response != null && response.IsSuccessStatusCode)
+                {
+                    // Redirect to a success page or handle success logic
+                    return RedirectToAction("AdminPortal", "Admin");
+                }
+                else
+                {
+                    // Redirect to an error page or handle error logic
+                    return RedirectToAction("ErrorPage", "Account");
+                }
+            }
         }
     }
 }

@@ -11,7 +11,6 @@ namespace NeoNovaAPIAdmin.Controllers
         {
         }
 
-        [Authorize]
         public IActionResult AdminPortal()
         {
             return View();
