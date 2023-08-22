@@ -1,10 +1,18 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using System.Security.Claims
+
 @{
+    var user = Context.User;
+    var isNeo = user.Identity.IsAuthenticated && user.IsInRole("Neo");
 }
 
 <div class="text-center">
     <h1 class="display-4">Admin Portal</h1>
     <p>Stats Stats Stats. This will be the home page for admins, showing brief stats of the db health</p>
 </div>
+
+@if (isNeo)
+{
+    <form action="@Url.Action("CreateUsers", "Account")" method="get">
+        <button type="submit" class="btn btn-primary">Create Test Users</button>
+    </form>
+}

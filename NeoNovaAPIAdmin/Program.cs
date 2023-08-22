@@ -12,9 +12,11 @@ builder.Services.AddControllersWithViews(options =>
 {
     var policy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
+        .RequireRole("Neo", "Admin")
         .Build();
     options.Filters.Add(new AuthorizeFilter(policy));
 });
+
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<JwtExtractorHelper>();
@@ -69,8 +71,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("NeoPolicy", policy =>
-         policy.RequireClaim("ClaimType", "Neo"));
+
 });
 
 
