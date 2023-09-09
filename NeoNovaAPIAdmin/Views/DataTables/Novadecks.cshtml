@@ -1,4 +1,6 @@
-﻿@using NeoNovaAPIAdmin.Models.DbModels;
+﻿@using NeoNovaAPIAdmin.Helpers
+@inject JwtExtractorHelper JwtExtractor
+@using NeoNovaAPIAdmin.Models.DbModels;
 @{
 }
 
@@ -7,7 +9,15 @@
 <div class="text-center">
     <h1 class="display-4">Novadecks Page</h1>
     <p>These are the Novadecks</p>
-    <button class="btn btn-success newButton" data-form="newForm">New +</button>
+    @{
+        var userClaims = JwtExtractor.GetClaimsFromJwt();
+        var isNeo = userClaims?.IsInRole("Neo") ?? false;
+    }
+
+    @if (isNeo)
+    {
+        <button class="btn btn-success newButton" data-form="newForm">New +</button>
+    }
 </div>
 <div id="newFormDiv">
     <form id="newForm" class="newForm" action="@Url.Action("AddNovadeck")" method="post" style="display: none;">
@@ -59,6 +69,8 @@
                         <input type="checkbox" class="form-control edit" @(Convert.ToBoolean(novadeck.IsPinned) ? "checked" : "") style="display:none;" />
                     </td>
                     <td>
+                        @if (isNeo)
+                        {
                         <div class="action-buttons">
                             <div class="button-row">
                                 <button type="button" class="btn btn-primary editBtn">Edit</button>
@@ -71,6 +83,7 @@
                                 <button type="button" class="btn btn-danger deleteBtn" data-url="@Url.Action("DeleteNovadeck", new { id = novadeck.Id })">Delete</button>
                             </div>
                         </div>
+                        }
                     </td>
                 </tr>
             }
