@@ -293,5 +293,64 @@ namespace NeoNovaAPIAdmin.Controllers
             return View("Error"); // Handle error, e.g., return a view with an error message
         }
 
+
+        // WHOLESALE BUG MESSAGES
+
+        [HttpGet]
+        public async Task<IActionResult> WholesaleBugMessages()
+        {
+            return await GetViewAsync<Models.DbModels.WholesaleBugMessage>("https://novaapp-2023.azurewebsites.net/api/WholesaleBugMessages");
+        }
+
+        // Add WholesaleBugMessage
+        [HttpPost]
+        public async Task<IActionResult> AddWholesaleBugMessage(Models.DbModels.WholesaleBugMessage wholesaleBugMessage)
+        {
+            using (var httpClient = InitializeHttpClient())
+            {
+                var json = JsonSerializer.Serialize(wholesaleBugMessage);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await httpClient.PostAsync("https://novaapp-2023.azurewebsites.net/api/WholesaleBugMessages", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("WholesaleBugMessages");
+                }
+            }
+            return View("Error");
+        }
+
+        // Update WholesaleBugMessage
+        [HttpPost]
+        public async Task<IActionResult> PutWholesaleBugMessage(int id, Models.DbModels.WholesaleBugMessage wholesaleBugMessage)
+        {
+            using (var httpClient = InitializeHttpClient())
+            {
+                var json = JsonSerializer.Serialize(wholesaleBugMessage);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await httpClient.PutAsync($"https://novaapp-2023.azurewebsites.net/api/WholesaleBugMessages/{id}", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("WholesaleBugMessages");
+                }
+            }
+            return View("Error");
+        }
+
+        // Delete WholesaleBugMessage
+        [HttpPost]
+        public async Task<IActionResult> DeleteWholesaleBugMessage(int id)
+        {
+            using (var httpClient = InitializeHttpClient())
+            {
+                var response = await httpClient.DeleteAsync($"https://novaapp-2023.azurewebsites.net/api/WholesaleBugMessages/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("WholesaleBugMessages");
+                }
+            }
+            return View("Error");
+        }
+
+
     }
 }
