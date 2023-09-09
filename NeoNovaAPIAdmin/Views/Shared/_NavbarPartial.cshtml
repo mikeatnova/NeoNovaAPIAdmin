@@ -9,21 +9,17 @@
         <ul class="navbar-nav flex-grow-1">
             <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AdminPortal">Admin Portal</a>
-            </li>          
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="DataTables" asp-action="Faqs">Faqs DB</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="DataTables" asp-action="Stores">Stores DB</a>
-            </li>            
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="DataTables" asp-action="StoreHours">Store Hours DB</a>
-            </li>           
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="DataTables" asp-action="Novadecks">Novadeck DB</a>
-            </li>            
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="DataTables" asp-action="Geofences">Geofence DB</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Databases
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" asp-area="" asp-controller="DataTables" asp-action="Faqs">Faqs DB</a>
+                    <a class="dropdown-item" asp-area="" asp-controller="DataTables" asp-action="Stores">Stores DB</a>
+                    <a class="dropdown-item" asp-area="" asp-controller="DataTables" asp-action="Novadecks">Novadeck DB</a>
+                    <a class="dropdown-item" asp-area="" asp-controller="DataTables" asp-action="Geofences">Geofence DB</a>
+                </div>
             </li>
         </ul>
     </div>
