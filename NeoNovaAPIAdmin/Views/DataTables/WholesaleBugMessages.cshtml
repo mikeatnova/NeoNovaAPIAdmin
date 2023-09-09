@@ -23,7 +23,7 @@
             foreach (var message in Model)
             {
                 <div class="col-12 d-flex align-items-start">
-                    <input type="checkbox" class="form-check-input mt-3" id="@message.Id" />
+                    <input type="checkbox" class="form-check-input mt-3 mr-3" id="@message.Id" />
                     <div class="card w-100">
                         <div class="card-header">
                             <label class="form-check-label" for="@message.Id">@message.Title</label>
@@ -34,7 +34,7 @@
                         <div class="card-footer">
                             <small>ID: @message.Id</small><br />
                             <small>Posted by: @message.Username</small><br />
-                            <small>Date: TimeZoneInfo.ConvertTimeBySystemTimeZoneId(message.DateTimestamp, "Eastern Standard Time").ToString("MM/dd/yyyy hh:mm tt")</small><br />
+                            <small>Date: @TimeZoneInfo.ConvertTimeBySystemTimeZoneId(message.DateTimestamp, "Eastern Standard Time").ToString("MM/dd/yyyy hh:mm tt")</small><br />
                             <small>Urgency: @message.UrgencyRating</small>
                         </div>
                     </div>
