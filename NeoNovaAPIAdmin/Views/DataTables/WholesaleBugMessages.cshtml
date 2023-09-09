@@ -1,0 +1,48 @@
+﻿@using NeoNovaAPIAdmin.Helpers
+@inject JwtExtractorHelper JwtExtractor
+@using NeoNovaAPIAdmin.Models.DbModels;
+@{
+
+}
+
+@model List<WholesaleBugMessage>
+
+<div class="text-center">
+    <h1 class="display-4">Wholesale Bug Messages</h1>
+    <p>These are the Wholesale Bug Messages</p>
+    @{
+        var userClaims = JwtExtractor.GetClaimsFromJwt();
+        var isNeo = userClaims?.IsInRole("Neo") ?? false;
+    }
+</div>
+
+<div class="container">
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var message in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <input type="checkbox" class="form-check-input" id="@message.Id" />
+                            <label class="form-check-label" for="@message.Id">@message.Title</label>
+                        </div>
+                        <div class="card-body">
+                            <p>@message.MessageBody</p>
+                        </div>
+                        <div class="card-footer">
+                            <small>Posted by: @message.Username</small><br />
+                            <small>Date: @message.DateTimestamp.ToString("MM/dd/yyyy HH:mm")</small><br />
+                            <small>Urgency: @message.UrgencyRating</small>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No Wholesale Bug Messages found.</p>
+        }
+    </div>
+</div>
