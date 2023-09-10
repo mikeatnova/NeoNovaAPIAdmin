@@ -6,6 +6,9 @@
 }
 
 @model List<WholesaleBugMessage>
+@{
+    Model.Reverse();
+}
 
 <div class="text-center">
     <h1 class="display-4">Wholesale Bug Messages</h1>
@@ -24,7 +27,7 @@
             {
                 <div class="col-12 d-flex align-items-start" style="margin-bottom: 20px;">
                     <!-- Added margin-bottom -->
-                    <input type="checkbox" class="form-check-input mt-3 mr-3" id="@message.Id" style="margin-right: 20px;" /> <!-- Added margin-right -->
+                    <input type="checkbox" class="form-check-input mt-3 mr-3" id="@message.Id" style="margin-right: 20px;" />
                     <div class="card w-100">
                         <div class="card-header">
                             <label class="form-check-label" for="@message.Id">@message.Title</label>
