@@ -33,7 +33,7 @@ builder.Services.AddHttpClient("apiClient", client =>
     else
     {
         // Handle the case where the base address is not configured
-        // You might want to log a warning or throw an exception
+        // log a warning or throw an exception
     }
 });
 

@@ -17,7 +17,6 @@ namespace NeoNovaAPIAdmin.Models.DbModels
 
         [Required]
         public string Username { get; set; }
-        public DateTime DateTimestamp { get; set; }
 
         [Required]
         [Range(1, 5)]
