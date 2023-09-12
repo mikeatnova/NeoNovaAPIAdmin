@@ -57,7 +57,7 @@ namespace NeoNovaAPIAdmin.Controllers
 
         public async Task<IActionResult> ListAllUsers()
         {
-            return await GetViewAsync<AllUser>("https://novaapp-2023.azurewebsites.net/api/get-users"); // Replace with your API base URL
+            return await GetViewAsync<AllUser>("https://novaapp-2023.azurewebsites.net/api/Auth/get-users");
         }
 
     }
