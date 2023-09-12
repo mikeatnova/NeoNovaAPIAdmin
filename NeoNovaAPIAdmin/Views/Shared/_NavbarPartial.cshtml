@@ -1,47 +1,97 @@
 ﻿@if (ViewBag.IsUserAuthenticated != null && (bool)ViewBag.IsUserAuthenticated)
 {
-    <a class="navbar-brand" asp-area="" asp-controller="Admin" asp-action="AdminPortal">NeoNovaAPI</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-            aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-        <ul class="navbar-nav flex-grow-1">
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AdminPortal">Admin Portal</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="ListAllUsers">Users</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="DataTables" asp-action="WholesaleBugMessages">Wholesale Bugs</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Databases
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" asp-area="" asp-controller="DataTables" asp-action="Faqs">Faqs DB</a>
-                    <a class="dropdown-item" asp-area="" asp-controller="DataTables" asp-action="Stores">Stores DB</a>
-                    <a class="dropdown-item" asp-area="" asp-controller="DataTables" asp-action="Novadecks">Novadeck DB</a>
-                    <a class="dropdown-item" asp-area="" asp-controller="DataTables" asp-action="Geofences">Geofence DB</a>
-                </div>
-            </li>
-        </ul>
-    </div>
+    string role = ViewBag.UserRole ?? string.Empty;
+    if (role == "Neo")
+    {
+        <!-- Admin navigation bar -->
+        <!-- Your Admin specific links here -->
+        <a class="navbar-brand" asp-area="" asp-controller="Admin" asp-action="AdminPortal">NeoNovaAPI</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AdminPortal">Admin Portal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="ListAllUsers">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="DataTables" asp-action="WholesaleBugMessages">Wholesale Bugs</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Databases
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" asp-area="" asp-controller="DataTables" asp-action="Faqs">Faqs DB</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="DataTables" asp-action="Stores">Stores DB</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="DataTables" asp-action="Novadecks">Novadeck DB</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="DataTables" asp-action="Geofences">Geofence DB</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    }
+    else if (role == "Admin")
+    {
+        <!-- Neo navigation bar -->
+        <!-- Your Neo specific links here -->
+        <a class="navbar-brand" asp-area="" asp-controller="Admin" asp-action="AdminPortal">NeoNovaAPI</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AdminPortal">Admin Portal</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Databases
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" asp-area="" asp-controller="DataTables" asp-action="Faqs">Faqs DB</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="DataTables" asp-action="Stores">Stores DB</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="DataTables" asp-action="Novadecks">Novadeck DB</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="DataTables" asp-action="Geofences">Geofence DB</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    }
+    else
+    {
+        <!-- Default navigation bar for authenticated users -->
+        <!-- Default links here -->
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">NeoNovaAPI</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+            </ul>
+        </div>
+    }
 }
 else
 {
-    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">NeoNovaAPI</a>
+    <!-- Navigation bar for not authenticated users -->
+    <!-- Public links here -->
+    <a class="navbar-brand" asp-area="" asp-controller="Account" asp-action="Login">NeoNovaAPI</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
         <ul class="navbar-nav flex-grow-1">
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-            </li>
         </ul>
     </div>
 }

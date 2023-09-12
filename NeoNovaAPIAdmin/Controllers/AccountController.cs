@@ -48,6 +48,13 @@ namespace NeoNovaAPIAdmin.Controllers
             return httpClient;
         }
 
+        public IActionResult AccountPage()
+        {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            ViewBag.UserNameOrEmail = claimsIdentity?.FindFirst(ClaimTypes.Name)?.Value;
+            return View();
+        }
+
         // LOGIN
 
         // Load LoginPage
