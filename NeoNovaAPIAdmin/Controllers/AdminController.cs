@@ -66,24 +66,29 @@ namespace NeoNovaAPIAdmin.Controllers
         {
             using (var httpClient = InitializeHttpClient())
             {
-                // Using an anonymous object to structure the data
                 var seedUserObject = new
                 {
                     Email = email,
                     Role = role
                 };
 
-                // Serialize the object to JSON
                 var payload = JsonSerializer.Serialize(seedUserObject);
-
-                // Create HTTP content and specify the media type as JSON
                 var content = new StringContent(payload, Encoding.UTF8, "application/json");
 
-                // Perform the POST request
                 var response = await httpClient.PostAsync("https://novaapp-2023.azurewebsites.net/api/Auth/seed-new-user", content);
 
                 if (response.IsSuccessStatusCode)
                 {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var responseData = JsonSerializer.Deserialize<dynamic>(responseContent);
+
+                    // Extract the generated password from the response
+                    string generatedPassword = responseData.GeneratedPassword;
+
+                    // You can pass this generatedPassword to your View
+                    // Or you may set it in some state to reveal it later
+                    ViewData["GeneratedPassword"] = generatedPassword;
+
                     return RedirectToAction("AdminPortal");  // Redirects back to the AdminPortal
                 }
                 else
