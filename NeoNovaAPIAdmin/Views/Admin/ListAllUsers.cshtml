@@ -1,27 +1,19 @@
-﻿@using NeoNovaAPIAdmin.Helpers
-@using System.Collections.Generic
-@inject JwtExtractorHelper JwtExtractor
-@using NeoNovaAPIAdmin.Models
-@using System.Text;
+﻿@using NeoNovaAPIAdmin.Models
+@model List<AllUser>
+
 @{
+    Dictionary<string, List<AllUser>> roleToUsers = new Dictionary<string, List<AllUser>>();
 
-    List<AllUser> neoUsers = new List<AllUser>();
-    List<AllUser> adminUsers = new List<AllUser>();
-    List<AllUser> commonUsers = new List<AllUser>();
-
+    // Populate the dictionary by iterating over all users and their roles.
     foreach (var user in Model)
     {
-        if (user.Roles.Contains("Neo"))
+        foreach (var role in user.Roles)
         {
-            neoUsers.Add(user);
-        }
-        else if (user.Roles.Contains("Admin"))
-        {
-            adminUsers.Add(user);
-        }
-        else
-        {
-            commonUsers.Add(user);
+            if (!roleToUsers.ContainsKey(role))
+            {
+                roleToUsers[role] = new List<AllUser>();
+            }
+            roleToUsers[role].Add(user);
         }
     }
 }
@@ -32,26 +24,47 @@
 </div>
 
 <div class="container">
-    @UserTable("Neo Users", neoUsers)
-    @UserTable("Admin Users", adminUsers)
-    @UserTable("Common Users", commonUsers)
-</div>
-
-@functions {
-    private string UserTable(string title, List<AllUser> users)
+    @if (roleToUsers.Count == 0)
     {
-        var sb = new StringBuilder();
-        sb.Append($"<h2>{title} (Total: {users.Count})</h2>");
-        sb.Append("<table class='table'>");
-        sb.Append("<thead><tr><th>ID</th><th>Username</th><th>Email</th><th>Roles</th></tr></thead>");
-        sb.Append("<tbody>");
-
-        foreach (var user in users)
-        {
-            sb.Append($"<tr><td>{user.Id}</td><td>{user.UserName}</td><td>{user.Email}</td><td>{string.Join(", ", user.Roles)}</td></tr>");
-        }
-
-        sb.Append("</tbody></table>");
-        return sb.ToString();
+        <h2>No Users</h2>
     }
-}
+    else
+    {
+        foreach (var kvp in roleToUsers)
+        {
+            var role = kvp.Key;
+            var usersInRole = kvp.Value;
+
+            <h2>@role Users (Total: @usersInRole.Count)</h2>
+
+            if (usersInRole.Count == 0)
+            {
+                <p>No Users in this Role</p>
+            }
+            else
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Roles</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in usersInRole)
+                        {
+                            <tr>
+                                <td>@user.Id</td>
+                                <td>@user.UserName</td>
+                                <td>@user.Email</td>
+                                <td>@string.Join(", ", user.Roles)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    }
+</div>
