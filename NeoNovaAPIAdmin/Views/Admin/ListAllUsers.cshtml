@@ -40,8 +40,10 @@
                 var usersInRole = roleToUsers[role];
                 <details>
                     <summary>
-                        <h2>@(role + "'s") (Total: @usersInRole.Count)</h2>
+                        <h2 style="display:inline;">@(role + "'s")</h2>
+                        <span style="float:right;">(Total: @usersInRole.Count)</span>
                     </summary>
+
 
                     @if (usersInRole.Count == 0)
                     {
