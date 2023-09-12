@@ -6,6 +6,7 @@
     string[] roleOrder = { "Neo", "Admin", "CommonUser" };
 
     Dictionary<string, List<AllUser>> roleToUsers = new Dictionary<string, List<AllUser>>();
+    int totalUsers = 0;
 
     // Populate the dictionary by iterating over all users and their roles.
     foreach (var user in Model)
@@ -19,10 +20,13 @@
             roleToUsers[role].Add(user);
         }
     }
+    // Calculate the total number of users
+    totalUsers = Model.Count;
 }
 
+
 <div class="text-center">
-    <h1 class="display-4">List of All Users</h1>
+    <h1 class="display-4">All Users <span>(@totalUsers)</span></h1>
     <p>Admin view of all registered users.</p>
 </div>
 
