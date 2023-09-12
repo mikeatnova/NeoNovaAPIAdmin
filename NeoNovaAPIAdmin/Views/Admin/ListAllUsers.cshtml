@@ -1,0 +1,46 @@
+﻿@using NeoNovaAPIAdmin.Helpers
+@inject JwtExtractorHelper JwtExtractor
+@using NeoNovaAPIAdmin.Models
+@{
+
+}
+
+@model IEnumerable<AllUser>
+@{
+
+}
+
+<div class="text-center">
+    <h1 class="display-4">List of All Users</h1>
+    <p>Admin view of all registered users.</p>
+</div>
+
+<div class="container">
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var user in Model)
+            {
+                <div class="col-12 d-flex align-items-start" style="margin-bottom: 20px;">
+                    <input type="checkbox" class="form-check-input mt-3 mr-3" id="@user.Id" style="margin-right: 20px;" />
+                    <div class="card w-100">
+                        <div class="card-header">
+                            <label class="form-check-label" for="@user.Id">@user.UserName</label>
+                        </div>
+                        <div class="card-body">
+                            <p>Email: @user.Email</p>
+                            <p>Roles: @string.Join(", ", user.Roles)</p>
+                        </div>
+                        <div class="card-footer">
+                            <small>ID: @user.Id</small>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No users found.</p>
+        }
+    </div>
+</div>
