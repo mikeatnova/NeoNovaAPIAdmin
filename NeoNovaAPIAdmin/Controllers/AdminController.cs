@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using NeoNovaAPIAdmin.Helpers;
 using NeoNovaAPIAdmin.Models;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 
 namespace NeoNovaAPIAdmin.Controllers
@@ -60,5 +61,36 @@ namespace NeoNovaAPIAdmin.Controllers
             return await GetViewAsync<AllUser>("https://novaapp-2023.azurewebsites.net/api/Auth/get-users");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SeedNewUser(string email, string role)
+        {
+            using (var httpClient = InitializeHttpClient())
+            {
+                // Using an anonymous object to structure the data
+                var seedUserObject = new
+                {
+                    Email = email,
+                    Role = role
+                };
+
+                // Serialize the object to JSON
+                var payload = JsonSerializer.Serialize(seedUserObject);
+
+                // Create HTTP content and specify the media type as JSON
+                var content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+                // Perform the POST request
+                var response = await httpClient.PostAsync("https://novaapp-2023.azurewebsites.net/api/Auth/seed-new-user", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("AdminPortal");  // Redirects back to the AdminPortal
+                }
+                else
+                {
+                    return View("Error");  // Returns to an Error view
+                }
+            }
+        }
     }
 }

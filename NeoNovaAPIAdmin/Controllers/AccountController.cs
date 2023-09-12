@@ -106,19 +106,6 @@ namespace NeoNovaAPIAdmin.Controllers
             {
                 HttpResponseMessage response = null;
 
-                switch (action)
-                {
-                    case "CreateNeoUser":
-                        response = await httpClient.PostAsync("/api/auth/create-neo-user", null);
-                        break;
-                    case "CreateCommonUser":
-                        response = await httpClient.PostAsync("/api/auth/create-common-user", null);
-                        break;
-                    case "CreateAdminUser":
-                        response = await httpClient.PostAsync("/api/auth/create-admin-user", null);
-                        break;
-                }
-
                 if (response != null && response.IsSuccessStatusCode)
                 {
                     // Redirect to a success page or handle success logic
