@@ -2,6 +2,9 @@
 @model List<AllUser>
 
 @{
+    // Custom order of roles
+    string[] roleOrder = { "Neo", "Admin", "CommonUser" };
+
     Dictionary<string, List<AllUser>> roleToUsers = new Dictionary<string, List<AllUser>>();
 
     // Populate the dictionary by iterating over all users and their roles.
@@ -30,40 +33,45 @@
     }
     else
     {
-        foreach (var kvp in roleToUsers)
+        @foreach (var role in roleOrder)
         {
-            var role = kvp.Key;
-            var usersInRole = kvp.Value;
-
-            <h2>@role Users (Total: @usersInRole.Count)</h2>
-
-            if (usersInRole.Count == 0)
+            if (roleToUsers.ContainsKey(role))
             {
-                <p>No Users in this Role</p>
-            }
-            else
-            {
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Roles</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var user in usersInRole)
-                        {
-                            <tr>
-                                <td>@user.Id</td>
-                                <td>@user.UserName</td>
-                                <td>@user.Email</td>
-                                <td>@string.Join(", ", user.Roles)</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                var usersInRole = roleToUsers[role];
+                <details>
+                    <summary>
+                        <h2>@(role + "'s") (Total: @usersInRole.Count)</h2>
+                    </summary>
+
+                    @if (usersInRole.Count == 0)
+                    {
+                        <p>No Users in this Role</p>
+                    }
+                    else
+                    {
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>ID</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var user in usersInRole)
+                                {
+                                    <tr>
+                                        <td>@user.UserName</td>
+                                        <td>@user.Email</td>
+                                        <td>@string.Join(", ", user.Roles)</td>
+                                        <td>@user.Id</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </details>
             }
         }
     }
