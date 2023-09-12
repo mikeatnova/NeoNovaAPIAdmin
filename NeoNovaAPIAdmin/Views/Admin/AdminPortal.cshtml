@@ -12,7 +12,49 @@
 
 @if (isNeo)
 {
-    <form action="@Url.Action("CreateUsers", "Account")" method="get">
-        <button type="submit" class="btn btn-primary">Create Test Users</button>
-    </form>
+    <div class="d-flex justify-content-center">
+        <div class="card" style="width: 30rem;">
+            <div class="card-body">
+
+                <section id="seed-user-section">
+                    <h2>Seed New User</h2>
+
+                    <form id="seed-user-form" method="post" asp-action="SeedNewUser" asp-controller="Admin">
+                        <div class="form-group" style="background-color: #ffffff; padding: 10px;">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="Email" class="form-control" required />
+                        </div>
+
+                        <div class="form-group" style="background-color: #f2f2f2; padding: 10px;">
+                            <label for="role">Role</label>
+                            <div id="role" style="display: flex; align-items: center;">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="Role" id="CommonUser" value="CommonUser" required>
+                                    <label class="form-check-label" for="CommonUser">
+                                        CommonUser
+                                    </label>
+                                </div>
+
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="Role" id="Admin" value="Admin">
+                                    <label class="form-check-label" for="Admin">
+                                        Admin
+                                    </label>
+                                </div>
+
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="Role" id="Neo" value="Neo">
+                                    <label class="form-check-label" for="Neo">
+                                        Neo
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Seed User</button>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
 }
