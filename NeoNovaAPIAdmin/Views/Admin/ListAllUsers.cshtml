@@ -1,13 +1,29 @@
 ﻿@using NeoNovaAPIAdmin.Helpers
+@using System.Collections.Generic
 @inject JwtExtractorHelper JwtExtractor
 @using NeoNovaAPIAdmin.Models
+@using System.Text;
 @{
 
-}
+    List<AllUser> neoUsers = new List<AllUser>();
+    List<AllUser> adminUsers = new List<AllUser>();
+    List<AllUser> commonUsers = new List<AllUser>();
 
-@model IEnumerable<AllUser>
-@{
-
+    foreach (var user in Model)
+    {
+        if (user.Roles.Contains("Neo"))
+        {
+            neoUsers.Add(user);
+        }
+        else if (user.Roles.Contains("Admin"))
+        {
+            adminUsers.Add(user);
+        }
+        else
+        {
+            commonUsers.Add(user);
+        }
+    }
 }
 
 <div class="text-center">
@@ -16,31 +32,26 @@
 </div>
 
 <div class="container">
-    <div class="row">
-        @if (Model != null && Model.Any())
-        {
-            foreach (var user in Model)
-            {
-                <div class="col-12 d-flex align-items-start" style="margin-bottom: 20px;">
-                    <input type="checkbox" class="form-check-input mt-3 mr-3" id="@user.Id" style="margin-right: 20px;" />
-                    <div class="card w-100">
-                        <div class="card-header">
-                            <label class="form-check-label" for="@user.Id">@user.UserName</label>
-                        </div>
-                        <div class="card-body">
-                            <p>Email: @user.Email</p>
-                            <p>Roles: @string.Join(", ", user.Roles)</p>
-                        </div>
-                        <div class="card-footer">
-                            <small>ID: @user.Id</small>
-                        </div>
-                    </div>
-                </div>
-            }
-        }
-        else
-        {
-            <p>No users found.</p>
-        }
-    </div>
+    @UserTable("Neo Users", neoUsers)
+    @UserTable("Admin Users", adminUsers)
+    @UserTable("Common Users", commonUsers)
 </div>
+
+@functions {
+    private string UserTable(string title, List<AllUser> users)
+    {
+        var sb = new StringBuilder();
+        sb.Append($"<h2>{title} (Total: {users.Count})</h2>");
+        sb.Append("<table class='table'>");
+        sb.Append("<thead><tr><th>ID</th><th>Username</th><th>Email</th><th>Roles</th></tr></thead>");
+        sb.Append("<tbody>");
+
+        foreach (var user in users)
+        {
+            sb.Append($"<tr><td>{user.Id}</td><td>{user.UserName}</td><td>{user.Email}</td><td>{string.Join(", ", user.Roles)}</td></tr>");
+        }
+
+        sb.Append("</tbody></table>");
+        return sb.ToString();
+    }
+}
