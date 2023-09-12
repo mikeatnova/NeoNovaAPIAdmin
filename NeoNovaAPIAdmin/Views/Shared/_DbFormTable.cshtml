@@ -1,8 +1,0 @@
-﻿@if (ViewBag.IsUserAuthenticated != null && (bool)ViewBag.IsUserAuthenticated)
-{
-    <a class="btn btn-link" asp-controller="Account" asp-action="Logout">Logout</a>
-}
-else
-{
-    <a class="btn btn-link" asp-controller="Account" asp-action="LoginPage">Login</a>
-}
