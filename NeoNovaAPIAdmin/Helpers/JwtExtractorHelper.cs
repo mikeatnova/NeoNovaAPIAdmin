@@ -5,16 +5,8 @@ namespace NeoNovaAPIAdmin.Helpers
 {
     public class JwtExtractorHelper
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public JwtExtractorHelper(IHttpContextAccessor httpContextAccessor)
+        public ClaimsPrincipal? GetClaimsFromJwt(string? token)
         {
-            _httpContextAccessor = httpContextAccessor;
-        }
-
-        public ClaimsPrincipal? GetClaimsFromJwt()
-        {
-            string? token = _httpContextAccessor.HttpContext?.Request.Cookies["NeoWebAppCookie"];
             if (string.IsNullOrEmpty(token))
             {
                 return null;
@@ -28,9 +20,9 @@ namespace NeoNovaAPIAdmin.Helpers
             return principal;
         }
 
-        public string? ExtractGeneratedPasswordFromJwt()
+        public string? ExtractGeneratedPasswordFromJwt(string? token)
         {
-            var claimsPrincipal = GetClaimsFromJwt();
+            var claimsPrincipal = GetClaimsFromJwt(token);
             if (claimsPrincipal != null)
             {
                 var generatedPasswordClaim = claimsPrincipal.FindFirst("GeneratedPassword");
@@ -38,6 +30,5 @@ namespace NeoNovaAPIAdmin.Helpers
             }
             return null;
         }
-
     }
 }
