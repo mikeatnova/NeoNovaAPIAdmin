@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NeoNovaAPIAdmin.Helpers;
@@ -12,9 +13,13 @@ namespace NeoNovaAPIAdmin.Controllers
 {
     public class AdminController : CoreController
     {
-        public AdminController(JwtExtractorHelper jwtExtractorHelper)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public AdminController(JwtExtractorHelper jwtExtractorHelper, IHttpContextAccessor httpContextAccessor)
             : base(jwtExtractorHelper) // Call the base constructor with the required parameter
         {
+            _httpContextAccessor = httpContextAccessor;
+
         }
 
         private HttpClient InitializeHttpClient()
@@ -83,8 +88,11 @@ namespace NeoNovaAPIAdmin.Controllers
                     var tokenHeaderValue = response.Headers.GetValues("Authorization").FirstOrDefault()?.Substring(7);
                     if (tokenHeaderValue != null)
                     {
-                        var jwtExtractor = new JwtExtractorHelper();
-                        var generatedPassword = jwtExtractor.ExtractGeneratedPasswordFromJwt(tokenHeaderValue);
+                        // Store the token in the cookie so the JwtExtractorHelper can use it
+                        HttpContext.Response.Cookies.Append("NeoWebAppCookie", tokenHeaderValue);
+
+                        var jwtExtractor = new JwtExtractorHelper(_httpContextAccessor);
+                        var generatedPassword = jwtExtractor.ExtractGeneratedPasswordFromJwt(); // No need to pass token here
 
                         if (!string.IsNullOrEmpty(generatedPassword))
                         {
