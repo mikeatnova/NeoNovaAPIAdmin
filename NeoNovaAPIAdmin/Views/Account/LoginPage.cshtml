@@ -4,33 +4,32 @@
 
 @model NeoNovaAPIAdmin.Models.AdminUser
 
-<div class="container border" style="padding:20px">
-    <form method="post" asp-action="Login" asp-controller="Account">
-        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
-        <div class="form-group row">
-            <div class="col-2">
-                <label asp-for="Username"></label>
-            </div>
-            <div class="col-5">
-                <input type="text" asp-for="Username" class="form-control" />
+
+<div class="outer-container">
+    <div class="logo-container">
+        <img src="~/images/neonovalogo.png" alt="NeoNova Logo" class="logo-image" />
+    </div>
+
+    <div class="login-container">
+        <form method="post" asp-action="Login" asp-controller="Account" class="form-style">
+            <div class="text-danger text-center" asp-validation-summary="ModelOnly"></div>
+
+            <!-- Username -->
+            <div class="form-group">
+                <input type="text" asp-for="Username" class="form-control" placeholder="Username" />
                 <span class="text-danger" asp-validation-for="Username"></span>
             </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-2">
-                <label asp-for="Password"></label>
-            </div>
-            <div class="col-5">
-                <input type="password" asp-for="Password" class="form-control" />
+
+            <!-- Password -->
+            <div class="form-group form-group-margin">
+                <input type="password" asp-for="Password" class="form-control" placeholder="Password" />
                 <span class="text-danger" asp-validation-for="Password"></span>
             </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-2">
-                <input type="submit" class="btn btn-primary" value="Login" />
+
+            <!-- Submit Button -->
+            <div class="form-group form-group-padding">
+                <input type="submit" class="btn w-100 action-button" value="Login" />
             </div>
-            <div class="col-5">
-            </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>

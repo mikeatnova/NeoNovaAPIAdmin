@@ -1,0 +1,28 @@
+﻿/* Button Sizes */
+.btn-small {
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+.btn-medium {
+    padding: 12px 24px;
+    font-size: 16px;
+}
+
+.btn-large {
+    padding: 16px 32px;
+    font-size: 18px;
+}
+
+/* Action Button */
+.action-button {
+    background-color: #9ED154;
+    color: #000000;
+    border: none;
+    transition: 0.3s ease;
+}
+
+    .action-button:hover {
+        background-color: #86ba48; /* Slightly darker shade of the action color */
+        cursor: pointer;
+    }
