@@ -29,13 +29,13 @@
                     <!-- Added margin-bottom -->
                     <input type="checkbox" class="form-check-input mt-3 mr-3" id="@message.Id" style="margin-right: 20px;" />
                     <div class="card w-100">
-                        <div class="card-header">
+                        <div class="card-header text-dark">
                             <label class="form-check-label" for="@message.Id">@message.Title</label>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body text-dark">
                             <p>@message.MessageBody</p>
                         </div>
-                        <div class="card-footer">
+                        <div class="card-footer text-dark">
                             <small>ID: @message.Id</small><br />
                             <small>Posted by: @message.Username</small><br />
                             <small>Date: @TimeZoneInfo.ConvertTimeBySystemTimeZoneId(message.CreatedAt, "Eastern Standard Time").ToString("MM/dd/yyyy hh:mm tt")</small><br />
@@ -51,5 +51,3 @@
         }
     </div>
 </div>
-
-

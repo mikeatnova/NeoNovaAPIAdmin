@@ -21,7 +21,7 @@
 </div>
 <div id="newFormDiv">
     <form id="newForm" class="newForm" action="@Url.Action("AddStore")" method="post" style="display: none;">
-        <table>
+        <table class="text-light">
             <tr>
                 <td><input type="text" name="Name" placeholder="Name" required /></td>
             </tr>
@@ -108,7 +108,7 @@
 {
     <table class="table" id="storesTable">
         <thead>
-            <tr>
+            <tr class="text-light">
                 <th>Name</th>
                 <th>SubName</th>
                 <th>Registration Type</th>
@@ -145,7 +145,7 @@
             @foreach (var store in Model)
             {
                 <form action="@Url.Action("PutStore", new { id = store.Id })" method="post">
-                    <tr>
+                <tr class="text-light">
                         <input type="hidden" name="Id" value="@store.Id" />
                         <td>
                             <span class="text">@store.Name</span>

@@ -46,7 +46,7 @@
 {
     <table class="table" id="geofencesTable">
         <thead>
-            <tr>
+            <tr class="text-light">
                 <th>Latitude</th>
                 <th>Longitude</th>
                 <th>Radius</th>
@@ -56,7 +56,7 @@
         <tbody>
             @foreach (var geofence in Model)
             {
-                <tr>
+                <tr class="text-light">
                     <td>
                         <span class="text">@geofence.Latitude</span>
                         <input type="text" class="form-control edit" value="@geofence.Latitude" style="display:none;" />
