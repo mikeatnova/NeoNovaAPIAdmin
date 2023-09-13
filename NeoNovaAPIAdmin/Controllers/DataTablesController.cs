@@ -14,11 +14,13 @@ namespace NeoNovaAPIAdmin.Controllers
 {
     public class DataTablesController : CoreController
     {
+        private readonly IConfiguration _configuration;
         private readonly JwtExtractorHelper _jwtExtractorHelper;
 
-        public DataTablesController(JwtExtractorHelper jwtExtractorHelper)
+        public DataTablesController(JwtExtractorHelper jwtExtractorHelper, IConfiguration configuration)
             : base(jwtExtractorHelper) // Call the base constructor with the required parameter
         {
+            _configuration = configuration;
         }
 
 
@@ -62,7 +64,8 @@ namespace NeoNovaAPIAdmin.Controllers
         [HttpGet]
         public async Task<IActionResult> Faqs()
         {
-            return await GetViewAsync<Models.DbModels.Faq>("https://novaapp-2023.azurewebsites.net/api/Faqs");
+            string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
+            return await GetViewAsync<Models.DbModels.Faq>($"{baseUrl}/api/Faqs");
         }
 
         // Add Faq
@@ -71,9 +74,10 @@ namespace NeoNovaAPIAdmin.Controllers
         {
             using (var httpClient = InitializeHttpClient())
             {
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
                 var json = JsonSerializer.Serialize(faq);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await httpClient.PostAsync("https://novaapp-2023.azurewebsites.net/api/Faqs", content);
+                var response = await httpClient.PostAsync($"{baseUrl}/api/Faqs", content);
                 if (response.IsSuccessStatusCode)
                 {
                     // Redirect to the GET action to refresh the page
@@ -90,9 +94,10 @@ namespace NeoNovaAPIAdmin.Controllers
         {
             using (var httpClient = InitializeHttpClient())
             {
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
                 var json = JsonSerializer.Serialize(faq);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await httpClient.PutAsync($"https://novaapp-2023.azurewebsites.net/api/Faqs/{id}", content);
+                var response = await httpClient.PutAsync($"{baseUrl}/api/Faqs/{id}", content);
                 if (response.IsSuccessStatusCode)
                 {
                     // Redirect to the GET action to refresh the page
@@ -109,7 +114,8 @@ namespace NeoNovaAPIAdmin.Controllers
         {
             using (var httpClient = InitializeHttpClient())
             {
-                var response = await httpClient.DeleteAsync($"https://novaapp-2023.azurewebsites.net/api/Faqs/{id}");
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
+                var response = await httpClient.DeleteAsync($"{baseUrl}/api/Faqs/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     // Redirect to the GET action to refresh the page
@@ -126,7 +132,8 @@ namespace NeoNovaAPIAdmin.Controllers
         [HttpGet]
         public async Task<IActionResult> Geofences()
         {
-            return await GetViewAsync<Models.DbModels.Geofence>("https://novaapp-2023.azurewebsites.net/api/Geofences");
+            string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
+            return await GetViewAsync<Models.DbModels.Geofence>($"{baseUrl}/api/Geofences");
         }
 
         // Add Geofence
@@ -135,9 +142,10 @@ namespace NeoNovaAPIAdmin.Controllers
         {
             using (var httpClient = InitializeHttpClient())
             {
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
                 var json = JsonSerializer.Serialize(geofence);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await httpClient.PostAsync("https://novaapp-2023.azurewebsites.net/api/Geofences", content);
+                var response = await httpClient.PostAsync($"{baseUrl}/api/Geofences", content);
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Geofences");
@@ -152,9 +160,10 @@ namespace NeoNovaAPIAdmin.Controllers
         {
             using (var httpClient = InitializeHttpClient())
             {
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
                 var json = JsonSerializer.Serialize(geofence);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await httpClient.PutAsync($"https://novaapp-2023.azurewebsites.net/api/Geofences/{id}", content);
+                var response = await httpClient.PutAsync($"{baseUrl}/api/Geofences/{id}", content);
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Geofences");
@@ -169,7 +178,8 @@ namespace NeoNovaAPIAdmin.Controllers
         {
             using (var httpClient = InitializeHttpClient())
             {
-                var response = await httpClient.DeleteAsync($"https://novaapp-2023.azurewebsites.net/api/Geofences/{id}");
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
+                var response = await httpClient.DeleteAsync($"{baseUrl}/api/Geofences/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Geofences");
@@ -184,7 +194,8 @@ namespace NeoNovaAPIAdmin.Controllers
         [HttpGet]
         public async Task<IActionResult> Novadecks()
         {
-            return await GetViewAsync<Models.DbModels.Novadeck>("https://novaapp-2023.azurewebsites.net/api/Novadecks");
+            string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
+            return await GetViewAsync<Models.DbModels.Novadeck>($"{baseUrl}/api/Novadecks");
         }
 
         // Add Novadeck
@@ -193,9 +204,10 @@ namespace NeoNovaAPIAdmin.Controllers
         {
             using (var httpClient = InitializeHttpClient())
             {
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
                 var json = JsonSerializer.Serialize(novadeck);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await httpClient.PostAsync("https://novaapp-2023.azurewebsites.net/api/Novadecks", content);
+                var response = await httpClient.PostAsync($"{baseUrl}/api/Novadecks", content);
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Novadecks"); // Redirect to the GET action to refresh the page
@@ -210,9 +222,10 @@ namespace NeoNovaAPIAdmin.Controllers
         {
             using (var httpClient = InitializeHttpClient())
             {
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
                 var json = JsonSerializer.Serialize(novadeck);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await httpClient.PutAsync($"https://novaapp-2023.azurewebsites.net/api/Novadecks/{id}", content);
+                var response = await httpClient.PutAsync($"{baseUrl}/api/Novadecks/{id}", content);
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Novadecks"); // Redirect to the GET action to refresh the page
@@ -227,7 +240,8 @@ namespace NeoNovaAPIAdmin.Controllers
         {
             using (var httpClient = InitializeHttpClient())
             {
-                var response = await httpClient.DeleteAsync($"https://novaapp-2023.azurewebsites.net/api/Novadecks/{id}");
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
+                var response = await httpClient.DeleteAsync($"{baseUrl}/api/Novadecks/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Novadecks"); // Redirect to the GET action to refresh the page
@@ -236,12 +250,14 @@ namespace NeoNovaAPIAdmin.Controllers
             return View("Error"); // Handle error, e.g., return a view with an error message
         }
 
+
         // STORES
 
         [HttpGet]
         public async Task<IActionResult> Stores()
         {
-            return await GetViewAsync<Models.DbModels.Store>("https://novaapp-2023.azurewebsites.net/api/Stores");
+            string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
+            return await GetViewAsync<Models.DbModels.Store>($"{baseUrl}/api/Stores");
         }
 
         // Add Store
@@ -250,9 +266,10 @@ namespace NeoNovaAPIAdmin.Controllers
         {
             using (var httpClient = InitializeHttpClient())
             {
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
                 var json = JsonSerializer.Serialize(store);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await httpClient.PostAsync("https://novaapp-2023.azurewebsites.net/api/Stores", content);
+                var response = await httpClient.PostAsync($"{baseUrl}/api/Stores", content);
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Stores"); // Redirect to the GET action to refresh the page
@@ -267,9 +284,10 @@ namespace NeoNovaAPIAdmin.Controllers
         {
             using (var httpClient = InitializeHttpClient())
             {
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
                 var json = JsonSerializer.Serialize(store);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await httpClient.PutAsync($"https://novaapp-2023.azurewebsites.net/api/Stores/{id}", content);
+                var response = await httpClient.PutAsync($"{baseUrl}/api/Stores/{id}", content);
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Stores"); // Redirect to the GET action to refresh the page
@@ -284,7 +302,8 @@ namespace NeoNovaAPIAdmin.Controllers
         {
             using (var httpClient = InitializeHttpClient())
             {
-                var response = await httpClient.DeleteAsync($"https://novaapp-2023.azurewebsites.net/api/Stores/{id}");
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
+                var response = await httpClient.DeleteAsync($"{baseUrl}/api/Stores/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Stores"); // Redirect to the GET action to refresh the page
@@ -299,7 +318,8 @@ namespace NeoNovaAPIAdmin.Controllers
         [HttpGet]
         public async Task<IActionResult> WholesaleBugMessages()
         {
-            return await GetViewAsync<Models.DbModels.WholesaleBugMessage>("https://novaapp-2023.azurewebsites.net/api/WholesaleBugMessages");
+            string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
+            return await GetViewAsync<Models.DbModels.WholesaleBugMessage>($"{baseUrl}/api/WholesaleBugMessages");
         }
 
         // Add WholesaleBugMessage
@@ -308,9 +328,10 @@ namespace NeoNovaAPIAdmin.Controllers
         {
             using (var httpClient = InitializeHttpClient())
             {
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
                 var json = JsonSerializer.Serialize(wholesaleBugMessage);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await httpClient.PostAsync("https://novaapp-2023.azurewebsites.net/api/WholesaleBugMessages", content);
+                var response = await httpClient.PostAsync($"{baseUrl}/api/WholesaleBugMessages", content);
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("WholesaleBugMessages");
@@ -325,9 +346,10 @@ namespace NeoNovaAPIAdmin.Controllers
         {
             using (var httpClient = InitializeHttpClient())
             {
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
                 var json = JsonSerializer.Serialize(wholesaleBugMessage);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await httpClient.PutAsync($"https://novaapp-2023.azurewebsites.net/api/WholesaleBugMessages/{id}", content);
+                var response = await httpClient.PutAsync($"{baseUrl}/api/WholesaleBugMessages/{id}", content);
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("WholesaleBugMessages");
@@ -342,7 +364,8 @@ namespace NeoNovaAPIAdmin.Controllers
         {
             using (var httpClient = InitializeHttpClient())
             {
-                var response = await httpClient.DeleteAsync($"https://novaapp-2023.azurewebsites.net/api/WholesaleBugMessages/{id}");
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
+                var response = await httpClient.DeleteAsync($"{baseUrl}/api/WholesaleBugMessages/{id}");
                 if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction("WholesaleBugMessages");
@@ -350,7 +373,5 @@ namespace NeoNovaAPIAdmin.Controllers
             }
             return View("Error");
         }
-
-
     }
 }

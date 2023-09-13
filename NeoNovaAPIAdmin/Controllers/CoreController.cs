@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using NeoNovaAPIAdmin.Helpers;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 
 namespace NeoNovaAPIAdmin.Controllers
@@ -46,6 +47,22 @@ namespace NeoNovaAPIAdmin.Controllers
                 return true;
             }
             return false;
+        }
+
+        // Common method to initialize HttpClient with authorization header
+        private HttpClient InitializeHttpClient()
+        {
+            var httpClient = new HttpClient();
+
+            // Retrieve the token from the cookie
+            var token = HttpContext.Request.Cookies["NeoWebAppCookie"];
+
+            if (token != null)
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            return httpClient;
         }
 
     }

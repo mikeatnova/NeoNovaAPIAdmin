@@ -4,22 +4,25 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NeoNovaAPIAdmin.Helpers;
 using NeoNovaAPIAdmin.Models;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace NeoNovaAPIAdmin.Controllers
 {
     public class AdminController : CoreController
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IConfiguration _configuration;
 
-        public AdminController(JwtExtractorHelper jwtExtractorHelper, IHttpContextAccessor httpContextAccessor)
+        public AdminController(JwtExtractorHelper jwtExtractorHelper, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
             : base(jwtExtractorHelper) // Call the base constructor with the required parameter
         {
             _httpContextAccessor = httpContextAccessor;
-
+            _configuration = configuration;
         }
 
         private HttpClient InitializeHttpClient()
@@ -64,57 +67,38 @@ namespace NeoNovaAPIAdmin.Controllers
 
         public async Task<IActionResult> ListAllUsers()
         {
-            return await GetViewAsync<AllUser>("https://novaapp-2023.azurewebsites.net/api/Auth/get-users");
+            string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
+            return await GetViewAsync<AllUser>($"{baseUrl}/api/Auth/get-users");
         }
 
         [HttpPost]
-        public async Task<IActionResult> SeedNewUser(string email, string role)
+        public async Task<IActionResult> SeedNewUser(string email, string role, string password)  // Added password parameter
         {
             using (var httpClient = InitializeHttpClient())
             {
-                var seedUserObject = new
-                {
-                    Email = email,
-                    Role = role
-                };
-
+                // Prepare the payload
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
+                var seedUserObject = new { Email = email, Role = role, Password = password };  // Added password to payload
                 var payload = JsonSerializer.Serialize(seedUserObject);
                 var content = new StringContent(payload, Encoding.UTF8, "application/json");
 
-                var response = await httpClient.PostAsync("https://novaapp-2023.azurewebsites.net/api/Auth/seed-new-user", content);
+                // Make the request
+                var response = await httpClient.PostAsync($"{baseUrl}/api/Auth/seed-new-user", content);
 
+                // Handle the response
                 if (response.IsSuccessStatusCode)
                 {
-                    var tokenHeaderValue = response.Headers.GetValues("Authorization").FirstOrDefault()?.Substring(7);
-                    if (tokenHeaderValue != null)
-                    {
-                        // Store the token in the cookie so the JwtExtractorHelper can use it
-                        HttpContext.Response.Cookies.Append("NeoWebAppCookie", tokenHeaderValue);
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    dynamic data = JsonConvert.DeserializeObject<dynamic>(jsonResponse);
+                    string username = data.username;
 
-                        var jwtExtractor = new JwtExtractorHelper(_httpContextAccessor);
-                        var generatedPassword = jwtExtractor.ExtractGeneratedPasswordFromJwt(); // No need to pass token here
+                    TempData["GeneratedUsername"] = username;
+                    return RedirectToAction("AdminPortal");
+                }
 
-                        if (!string.IsNullOrEmpty(generatedPassword))
-                        {
-                            TempData["GeneratedPassword"] = generatedPassword;
-                            return RedirectToAction("AdminPortal");
-                        }
-                    }
-                    return View("Error");
-                }
-                else
-                {
-                    return View("Error");
-                }
+                // Redirect to error page for any failures
+                return View("Error");
             }
         }
-
-        [HttpPost]
-        public IActionResult ClearGeneratedPassword()
-        {
-            TempData.Remove("GeneratedPassword");
-            return RedirectToAction("AdminPortal");
-        }
-
     }
 }
