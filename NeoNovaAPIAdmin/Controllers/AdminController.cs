@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NeoNovaAPIAdmin.Helpers;
 using NeoNovaAPIAdmin.Models;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -66,31 +67,50 @@ namespace NeoNovaAPIAdmin.Controllers
         {
             using (var httpClient = InitializeHttpClient())
             {
-                // Using an anonymous object to structure the data
                 var seedUserObject = new
                 {
                     Email = email,
                     Role = role
                 };
 
-                // Serialize the object to JSON
                 var payload = JsonSerializer.Serialize(seedUserObject);
-
-                // Create HTTP content and specify the media type as JSON
                 var content = new StringContent(payload, Encoding.UTF8, "application/json");
 
-                // Perform the POST request
                 var response = await httpClient.PostAsync("https://novaapp-2023.azurewebsites.net/api/Auth/seed-new-user", content);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("AdminPortal");  // Redirects back to the AdminPortal
+                    // Assuming the JWT token comes as part of the response body
+                    var tokenResponse = await response.Content.ReadAsStringAsync();
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var jwtToken = tokenHandler.ReadJwtToken(tokenResponse);
+
+                    // Now, let's extract the generated password from the JWT token
+                    var generatedPasswordClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "GeneratedPassword");
+                    var generatedPassword = generatedPasswordClaim?.Value;
+
+                    if (string.IsNullOrEmpty(generatedPassword))
+                    {
+                        return View("Error");  // Or handle the lack of a password in some other way
+                    }
+
+                    // At this point, generatedPassword contains the value you're interested in
+                    // Use it as you see fit
+                    TempData["GeneratedPassword"] = generatedPassword;
+                    return RedirectToAction("AdminPortal");
                 }
                 else
                 {
-                    return View("Error");  // Returns to an Error view
+                    return View("Error");
                 }
             }
+        }
+
+        [HttpPost]
+        public IActionResult ClearGeneratedPassword()
+        {
+            TempData.Remove("GeneratedPassword");
+            return RedirectToAction("AdminPortal");
         }
 
     }

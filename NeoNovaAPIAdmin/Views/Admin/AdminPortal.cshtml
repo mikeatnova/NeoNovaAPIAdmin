@@ -53,6 +53,27 @@
 
                         <button type="submit" class="btn btn-primary">Seed User</button>
                     </form>
+                    <div class="d-flex justify-content-center">
+                        <div class="card mt-4" style="width: 30rem;">
+                            <div class="card-body">
+                                <h2>Generated Password</h2>
+                                <p>
+                                    @if (TempData["GeneratedPassword"] != null)
+                                    {
+                                        <span>@TempData["GeneratedPassword"]</span>
+                                        TempData.Keep("GeneratedPassword");
+                                    }
+                                    else
+                                    {
+                                        <span>No generated password yet.</span>
+                                    }
+                                </p>
+                                <form asp-action="ClearGeneratedPassword" method="post" asp-controller="Admin">
+                                    <button type="submit" class="btn btn-danger">Clear</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </section>
             </div>
         </div>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
 using NeoNovaAPIAdmin.Models;
 using System.IdentityModel.Tokens.Jwt;
@@ -95,35 +96,6 @@ namespace NeoNovaAPIAdmin.Controllers
 
             // Redirect to the login page
             return RedirectToAction("LoginPage", "Account");
-        }
-
-        // CREATE USERS
-
-        // Load CreateUsers View
-        public IActionResult CreateUsers()
-        {
-            return View(); // You can return the view that contains the form
-        }
-
-        // Create Users Api request
-        [HttpPost]
-        public async Task<IActionResult> CreateUsers(string action)
-        {
-            using (var httpClient = InitializeHttpClient())
-            {
-                HttpResponseMessage response = null;
-
-                if (response != null && response.IsSuccessStatusCode)
-                {
-                    // Redirect to a success page or handle success logic
-                    return RedirectToAction("AdminPortal", "Admin");
-                }
-                else
-                {
-                    // Redirect to an error page or handle error logic
-                    return RedirectToAction("ErrorPage", "Account");
-                }
-            }
         }
     }
 }
