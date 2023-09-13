@@ -57,7 +57,7 @@
                     {
                         <table class="table">
                             <thead>
-                                <tr>
+                                <tr class="text-light">
                                     <th>Username</th>
                                     <th>Email</th>
                                     <th>Role</th>
@@ -67,7 +67,7 @@
                             <tbody>
                                 @foreach (var user in usersInRole)
                                 {
-                                    <tr>
+                                    <tr class="text-light">
                                         <td>@user.UserName</td>
                                         <td>@user.Email</td>
                                         <td>@string.Join(", ", user.Roles)</td>

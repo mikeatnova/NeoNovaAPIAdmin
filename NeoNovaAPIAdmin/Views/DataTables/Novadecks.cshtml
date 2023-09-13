@@ -21,7 +21,7 @@
 </div>
 <div id="newFormDiv">
     <form id="newForm" class="newForm" action="@Url.Action("AddNovadeck")" method="post" style="display: none;">
-        <table>
+        <table class="text-light">
             <tr>
                 <td><input type="text" name="Term" placeholder="Term" required /></td>
             </tr>
@@ -45,7 +45,7 @@
 {
     <table class="table" id="novadecksTable">
         <thead>
-            <tr>
+            <tr class="text-light">
                 <th>Term</th>
                 <th>Term Definition</th>
                 <th>Is Pinned</th>
@@ -55,7 +55,7 @@
         <tbody>
             @foreach (var novadeck in Model)
             {
-                <tr>
+                <tr class="text-light">
                     <td>
                         <span class="text">@novadeck.Term</span>
                         <input type="text" class="form-control edit" value="@novadeck.Term" style="display:none;" />
