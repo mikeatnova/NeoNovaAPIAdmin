@@ -80,7 +80,7 @@ namespace NeoNovaAPIAdmin.Controllers
                 {
                     var token = result.Token;
 
-                    Response.Cookies.Append("NeoWebAppCookie", token, new CookieOptions { HttpOnly = true, Secure = true });
+                    Response.Cookies.Append("NeoWebAppCookie", token, new CookieOptions { SameSite = SameSiteMode.None, HttpOnly = true, Secure = true });
                 }
             return RedirectToAction("AdminPortal", "Admin");
             }
