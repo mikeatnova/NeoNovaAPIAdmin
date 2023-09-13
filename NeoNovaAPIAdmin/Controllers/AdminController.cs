@@ -80,24 +80,19 @@ namespace NeoNovaAPIAdmin.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    // Assuming the JWT token comes as part of the response body
-                    var tokenResponse = await response.Content.ReadAsStringAsync();
-                    var tokenHandler = new JwtSecurityTokenHandler();
-                    var jwtToken = tokenHandler.ReadJwtToken(tokenResponse);
-
-                    // Now, let's extract the generated password from the JWT token
-                    var generatedPasswordClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "GeneratedPassword");
-                    var generatedPassword = generatedPasswordClaim?.Value;
-
-                    if (string.IsNullOrEmpty(generatedPassword))
+                    var tokenHeaderValue = response.Headers.GetValues("Authorization").FirstOrDefault()?.Substring(7);
+                    if (tokenHeaderValue != null)
                     {
-                        return View("Error");  // Or handle the lack of a password in some other way
-                    }
+                        var jwtExtractor = new JwtExtractorHelper();
+                        var generatedPassword = jwtExtractor.ExtractGeneratedPasswordFromJwt(tokenHeaderValue);
 
-                    // At this point, generatedPassword contains the value you're interested in
-                    // Use it as you see fit
-                    TempData["GeneratedPassword"] = generatedPassword;
-                    return RedirectToAction("AdminPortal");
+                        if (!string.IsNullOrEmpty(generatedPassword))
+                        {
+                            TempData["GeneratedPassword"] = generatedPassword;
+                            return RedirectToAction("AdminPortal");
+                        }
+                    }
+                    return View("Error");
                 }
                 else
                 {
