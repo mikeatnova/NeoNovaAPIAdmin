@@ -1,0 +1,43 @@
+﻿body {
+    background-color: black;
+    color: white;
+}
+
+.outer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.logo-image {
+    width: 20%;
+    object-fit: contain;
+}
+
+.login-container {
+    width: 40%;
+    padding: 20px;
+}
+
+.form-style {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.form-group-margin {
+    margin: 20px 0;
+}
+
+.form-group-padding {
+    padding: 0px 100px;
+}
