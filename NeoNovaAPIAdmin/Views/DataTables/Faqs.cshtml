@@ -22,17 +22,17 @@
 </div>
 <div id="newFormDiv">
     <form id="newForm" class="newForm" action="@Url.Action("AddFaq")" method="post" style="display: none;">
-        <table>
-            <tr class="text-light">
+        <table class="text-light">
+            <tr>
                 <td><input type="text" name="Question" placeholder="Question" required /></td>
             </tr>
-            <tr class="text-light">
+            <tr>
                 <td><input type="text" name="Answer" placeholder="Answer" required /></td>
             </tr>
-            <tr class="text-light">
+            <tr>
                 <td><input type="text" name="State" placeholder="State" required /></td>
             </tr>
-            <tr class="text-light">
+            <tr>
                 <td><input type="checkbox" name="IsPinned" /> Is Pinned</td>
             </tr>
             <tr>
@@ -61,21 +61,21 @@
             @foreach (var faq in Model)
             {
                 <form action="@Url.Action("PutFaq", new { id = faq.Id })" method="post">
-                <tr >
+                <tr class="text-light">
                     <input type="hidden" name="Id" value="@faq.Id" />
-                    <td class="text-light">
-                        <span class="text">@faq.Question</span>
+                    <td>
+                        <span>@faq.Question</span>
                         <textarea name="Question" class="form-control edit" style="display:none;">@faq.Question</textarea>
                     </td>
-                    <td class="text-light">
+                    <td>
                         <span class="text">@faq.Answer</span>
                         <textarea name="Answer" class="form-control edit" style="display:none;">@faq.Answer</textarea>
                     </td>
-                    <td class="text-light">
+                    <td>
                         <span class="text">@faq.State</span>
                         <input type="text" name="State" class="form-control edit" value="@faq.State" style="display:none;" />
                     </td>
-                    <td class="text-light">
+                    <td>
                         <span class="text">@faq.IsPinned</span>
                         <input type="checkbox" name="IsPinned" class="form-control edit" @(faq.IsPinned ? "checked" : "") style="display:none;" />
                     </td>

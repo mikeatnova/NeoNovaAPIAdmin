@@ -32,4 +32,12 @@
             </div>
         </form>
     </div>
+    <div>
+        @if (TempData["ApiError"] != null)
+        {
+            <div class="alert alert-danger text-center">
+                @TempData["ApiError"]
+            </div>
+        }
+    </div>
 </div>

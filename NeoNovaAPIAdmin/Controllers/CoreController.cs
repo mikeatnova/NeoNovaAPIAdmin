@@ -59,7 +59,7 @@ namespace NeoNovaAPIAdmin.Controllers
         }
 
         // Common method to initialize HttpClient with authorization header
-        private HttpClient InitializeHttpClient()
+        public HttpClient InitializeHttpClient()
         {
             var httpClient = new HttpClient();
 
