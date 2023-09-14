@@ -103,6 +103,16 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 
+// Redirect if user is Authenticated
+app.Use(async (context, next) =>
+{
+    if (context.User.Identity.IsAuthenticated && context.Request.Path.Value?.EndsWith("/LoginPage") == true)
+    {
+        context.Response.Redirect("/Admin/AdminPortal");
+        return;
+    }
+    await next.Invoke();
+});
 
 app.MapControllerRoute(
     name: "default",
