@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using NeoNovaAPIAdmin.Helpers;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 
@@ -15,18 +16,18 @@ namespace NeoNovaAPIAdmin.Controllers
             _jwtExtractorHelper = jwtExtractorHelper;
         }
 
-        private void FetchUserRole()
+        private void FetchUserStats()
         {
             var claims = _jwtExtractorHelper.GetClaimsFromJwt();
             if (claims != null)
             {
-                var roleClaim = claims.FindFirst(ClaimTypes.Role);
-                if (roleClaim != null)
-                {
-                    ViewBag.UserRole = roleClaim.Value;
-                }
+                ViewBag.Role = claims.FindFirst(ClaimTypes.Role)?.Value;
+                ViewBag.Username = claims.FindFirst(ClaimTypes.Name)?.Value;
+                ViewBag.Email = claims.FindFirst(ClaimTypes.Email)?.Value;
+                ViewBag.UserId = claims.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
             }
         }
+
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             bool isAuthenticated = IsUserAuthenticated();
@@ -38,7 +39,7 @@ namespace NeoNovaAPIAdmin.Controllers
                 HttpContext.Response.Cookies.Delete("NeoWebAppCookie");
             }
 
-            FetchUserRole(); // Fetch user role for view
+            FetchUserStats(); // Fetch user role for view
             base.OnActionExecuting(context);
         }
 

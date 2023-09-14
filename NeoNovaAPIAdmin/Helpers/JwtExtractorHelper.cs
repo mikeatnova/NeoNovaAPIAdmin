@@ -27,17 +27,5 @@ namespace NeoNovaAPIAdmin.Helpers
 
             return principal;
         }
-
-        public string? ExtractGeneratedPasswordFromJwt()
-        {
-            var claimsPrincipal = GetClaimsFromJwt();
-            if (claimsPrincipal != null)
-            {
-                var generatedPasswordClaim = claimsPrincipal.FindFirst("GeneratedPassword");
-                return generatedPasswordClaim?.Value;
-            }
-            return null;
-        }
-
     }
 }

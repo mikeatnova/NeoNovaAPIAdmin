@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -40,7 +41,9 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
+    options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -60,6 +63,9 @@ builder.Services.AddAuthentication(options =>
             return Task.CompletedTask;
         }
     };
+}).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => 
+{
+     options.LoginPath = "/Account/LoginPage"; 
 });
 
 builder.Services.AddAuthorization(options =>
@@ -74,8 +80,6 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 var app = builder.Build();
-
-// Redirect if user is not Authenticated 
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

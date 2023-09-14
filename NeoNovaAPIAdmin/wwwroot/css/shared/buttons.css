@@ -1,21 +1,26 @@
-﻿/* Button Sizes */
-.btn-small {
-    padding: 8px 12px;
+﻿/* Button Lengths */
+.btn-short {
+    border-radius: 5px;
     font-size: 14px;
+    width: 25%; /* Adjust as needed */
 }
 
 .btn-medium {
-    padding: 12px 24px;
+    border-radius: 5px;
     font-size: 16px;
+    width: 50%; /* Adjust as needed */
 }
 
-.btn-large {
-    padding: 16px 32px;
+.btn-full {
+    border-radius: 5px;
     font-size: 18px;
+    width: 100%; /* Takes the full width of the parent container */
 }
+
 
 /* Action Button */
 .action-button {
+    border-radius: 5px;
     background-color: #9ED154;
     color: #000000;
     border: none;

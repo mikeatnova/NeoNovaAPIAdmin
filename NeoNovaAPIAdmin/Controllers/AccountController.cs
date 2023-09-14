@@ -27,10 +27,17 @@ namespace NeoNovaAPIAdmin.Controllers
             _configuration = configuration;
         }
 
-        public IActionResult AccountPage()
+        [Authorize(Roles = "Neo, Admin")]
+        public IActionResult AccountPage(string message)
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
             ViewBag.UserNameOrEmail = claimsIdentity?.FindFirst(ClaimTypes.Name)?.Value;
+
+            if (!string.IsNullOrEmpty(message))
+            {
+                ViewBag.StatusMessage = message;
+            }
+
             return View();
         }
 

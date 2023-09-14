@@ -1,9 +1,140 @@
 ﻿@{
 }
 
-<div class="text-center">
-    <h1 class="display-4">@ViewBag.UserNameOrEmail</h1>
-    <p>Here is your Account</p>
+<style>
+    /* CSS for styling the aside section */
+    .aside-section {
+        border-radius: 5px;
+        background-color: lightgray;
+        color: black;
+        padding: 15px;
+    }
+
+    /* CSS for styling the header */
+    .aside-header {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    /* CSS for styling the list */
+    .aside-list {
+        list-style-type: none; /* Remove bullet points */
+        padding: 0;
+    }
+
+    /* CSS for styling the list items */
+    .aside-list-item {
+        margin: 10px 0;
+    }
+
+    /* CSS for styling the strong tag */
+    .aside-strong {
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    /* CSS styling for Password and Username change cards */
+    .card-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .custom-card {
+        width: 45%;
+        padding: 20px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .card-header {
+        font-size: 24px; /* or any other value you prefer */
+        text-align: center;
+    }
+
+    .input-field {
+        margin-bottom: 15px;
+    }
+
+        .input-field input {
+            width: 100%;
+        }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Main content -->
+        <div class="col-md-9">
+            <div>
+                <h1 class="display-4">Account</h1>
+                <p>@ViewBag.UserNameOrEmail</p>
+            </div>
+            <!-- Edit Profile Section -->
+            <section class="edit-profile text-center">
+                <h2>Edit Profile</h2>
+                <div class="card-container">
+                    <!-- Card for Changing Password -->
+                    <div class="custom-card">
+                        <h3 class="card-header">Change Password</h3>
+                        <form asp-action="ResetUserPassword" asp-controller="Admin" method="post">
+                            <!-- Set the appropriate action and method -->
+                            <input type="hidden" name="userId" value="@ViewBag.UserId" /> <!-- Hidden input for UserID -->
+                            <div class="input-field">
+                                <input type="password" id="currentPassword" name="currentPassword" placeholder="Current Password" />
+                            </div>
+                            <div class="input-field">
+                                <input type="password" id="newPassword" name="newPassword" placeholder="New Password" />
+                            </div>
+                            <div class="input-field">
+                                <input type="password" id="retypeNewPassword" name="retypeNewPassword" placeholder="Retype New Password" />
+                            </div>
+                            <button class="action-button btn-full" type="submit">Submit</button>
+                        </form>
+                    </div>
+
+                    <!-- Card for Changing Username -->
+                    <div class="custom-card">
+                        <h3 class="card-header">Change Username</h3>
+                        <form asp-action="ResetUserUsername" asp-controller="Admin" method="post">
+                            <!-- added action and controller -->
+                            <input type="hidden" name="userId" value="@ViewBag.UserId" /> <!-- Hidden input for UserID -->
+                            <div class="input-field">
+                                <input type="text" id="oldUsername" name="oldUsername" placeholder="Old Username" />
+                            </div>
+                            <div class="input-field">
+                                <input type="text" id="newUsername" name="newUsername" placeholder="New Username" />
+                            </div>
+                            <button class="action-button btn-full" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            <div class="text-center">
+                @if (ViewBag.StatusMessage != null)
+                {
+                    <div class="alert alert-success" role="alert">
+                    @ViewBag.StatusMessage
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Sidebar for stats -->
+
+        <div class="col-md-3">
+            <aside class="aside-section">
+                <h4 class="aside-header">Member Info</h4>
+                <ul class="aside-list">
+                    <li class="aside-list-item"><span class="aside-strong">Id:</span> @ViewBag.UserId</li>
+                    <li class="aside-list-item"><span class="aside-strong">Username:</span> @ViewBag.Username</li>
+                    <li class="aside-list-item"><span class="aside-strong">Email:</span> @ViewBag.Email</li>
+                    <li class="aside-list-item"><span class="aside-strong">Role:</span> @ViewBag.Role</li>
+                    <li class="aside-list-item"><span class="aside-strong">Member Since:</span></li>
+                </ul>
+            </aside>
+        </div>
+    </div>
 </div>
+
 
 
