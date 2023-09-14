@@ -7,16 +7,27 @@
 
 @if (ViewBag.IsUserAuthenticated != null && (bool)ViewBag.IsUserAuthenticated)
 {
-    if (!isAccountPage)
-    {
-        <a class="btn btn-link" asp-controller="Account" asp-action="AccountPage">@ViewBag.UserNameOrEmail</a>
-    }
+    <div class="login-partial-container">
+        @if (!isAccountPage)
+        {
+            <div class="account-button-wrapper">
+                <a class="btn btn-link account-button" asp-controller="Account" asp-action="AccountPage">
+                    <i class="fas fa-user"></i><span class="username-space">@ViewBag.UserNameOrEmail</span>
+                </a>
+            </div>
+        }
 
-    if (isAccountPage)
-    {
-        <a class="btn btn-link" asp-controller="Account" asp-action="Logout">Logout</a>
-    }
+        @if (isAccountPage)
+        {
+            <div class="logout-button-wrapper">
+                <a class="btn btn-link logout-button" asp-controller="Account" asp-action="Logout">
+                    <span class="username-space">Logout</span><i class="fas fa-sign-out-alt"></i>
+                </a>
+            </div>
+        }
+    </div>
 }
+
 else if (!isLoginPage)
 {
     <a class="btn btn-link" asp-controller="Account" asp-action="LoginPage">Login</a>
