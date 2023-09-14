@@ -1,0 +1,22 @@
+﻿.login-partial-container {
+    display: flex;
+    align-items: center;
+}
+
+.account-button-wrapper,
+.logout-button-wrapper {
+    padding: 0 8px;
+}
+
+.account-button,
+.logout-button {
+    display: flex;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+}
+
+.username-space {
+    margin: 0 8px;
+}
+
