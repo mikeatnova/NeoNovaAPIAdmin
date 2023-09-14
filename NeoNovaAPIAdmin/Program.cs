@@ -8,14 +8,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews(options =>
-{
-    var policy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .RequireRole("Neo", "Admin")
-        .Build();
-    options.Filters.Add(new AuthorizeFilter(policy));
-});
+builder.Services.AddControllersWithViews();
 
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
@@ -77,7 +70,7 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/Account/Login"; // Redirect to login page if not authenticated
+    options.LoginPath = "/Account/LoginPage"; // Redirect to login page if not authenticated
 });
 
 var app = builder.Build();
@@ -102,17 +95,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
-
-// Redirect if user is Authenticated
-app.Use(async (context, next) =>
-{
-    if (context.User.Identity.IsAuthenticated && context.Request.Path.Value?.EndsWith("/LoginPage") == true)
-    {
-        context.Response.Redirect("/Admin/AdminPortal");
-        return;
-    }
-    await next.Invoke();
-});
 
 app.MapControllerRoute(
     name: "default",

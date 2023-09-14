@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace NeoNovaAPIAdmin.Controllers
 {
+    [Authorize(Roles = "Neo, Admin")]
     public class DataTablesController : CoreController
     {
         private readonly IConfiguration _configuration;
@@ -21,23 +22,6 @@ namespace NeoNovaAPIAdmin.Controllers
             : base(jwtExtractorHelper) // Call the base constructor with the required parameter
         {
             _configuration = configuration;
-        }
-
-
-        // Common method to initialize HttpClient with authorization header
-        private HttpClient InitializeHttpClient()
-        {
-            var httpClient = new HttpClient();
-
-            // Retrieve the token from the cookie
-            var token = HttpContext.Request.Cookies["NeoWebAppCookie"];
-
-            if (token != null)
-            {
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            }
-
-            return httpClient;
         }
 
         private async Task<IActionResult> GetViewAsync<T>(string url)
@@ -60,7 +44,6 @@ namespace NeoNovaAPIAdmin.Controllers
         }
 
         // FREQUENTLY ASKED QUESTIONS
-
         [HttpGet]
         public async Task<IActionResult> Faqs()
         {

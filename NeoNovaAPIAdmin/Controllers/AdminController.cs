@@ -25,22 +25,6 @@ namespace NeoNovaAPIAdmin.Controllers
             _configuration = configuration;
         }
 
-        private HttpClient InitializeHttpClient()
-        {
-            var httpClient = new HttpClient();
-
-            // Retrieve the token from the cookie
-            var token = HttpContext.Request.Cookies["NeoWebAppCookie"];
-
-            if (token != null)
-            {
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            }
-
-            return httpClient;
-        }
-
-
         private async Task<IActionResult> GetViewAsync<T>(string url)
         {
             using (var httpClient = InitializeHttpClient())
@@ -60,17 +44,20 @@ namespace NeoNovaAPIAdmin.Controllers
             return View(new List<T>()); // Return an empty list if the request fails
         }
 
+        [Authorize(Roles = "Neo, Admin")]
         public IActionResult AdminPortal()
         {
             return View();
         }
 
+        [Authorize(Roles = "Neo, Admin")]
         public async Task<IActionResult> ListAllUsers()
         {
             string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
             return await GetViewAsync<AllUser>($"{baseUrl}/api/Auth/get-users");
         }
 
+        [Authorize(Roles = "Neo")]
         [HttpPost]
         public async Task<IActionResult> SeedNewUser(string email, string role, string password)  // Added password parameter
         {
