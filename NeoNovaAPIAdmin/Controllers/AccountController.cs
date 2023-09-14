@@ -11,6 +11,7 @@ using System.Text;
 using NeoNovaAPIAdmin.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace NeoNovaAPIAdmin.Controllers
 {
@@ -37,7 +38,7 @@ namespace NeoNovaAPIAdmin.Controllers
 
         // Load LoginPage
         [AllowAnonymous]
-        public IActionResult LoginPage()
+        public async Task<IActionResult> LoginPage()
         {
             // Check if the user should be authenticated
             bool isAuthenticated = IsUserAuthenticated();
@@ -54,6 +55,7 @@ namespace NeoNovaAPIAdmin.Controllers
             {
                 // Invalidate the cookie if the user is not authenticated
                 HttpContext.Response.Cookies.Delete("NeoWebAppCookie");
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             }
 
             return View();
