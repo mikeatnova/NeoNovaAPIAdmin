@@ -1,6 +1,6 @@
 ﻿@if (ViewBag.IsUserAuthenticated != null && (bool)ViewBag.IsUserAuthenticated)
 {
-    string role = ViewBag.UserRole ?? string.Empty;
+    string role = ViewBag.Role ?? string.Empty;
     if (role == "Neo")
     {
         <!-- Neo navigation bar -->
