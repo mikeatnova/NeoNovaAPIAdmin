@@ -29,10 +29,19 @@ namespace NeoNovaAPIAdmin.Controllers
         }
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            ViewBag.IsUserAuthenticated = IsUserAuthenticated();
+            bool isAuthenticated = IsUserAuthenticated();
+            ViewBag.IsUserAuthenticated = isAuthenticated;
+
+            if (!isAuthenticated)
+            {
+                // Invalidate the cookie here
+                HttpContext.Response.Cookies.Delete("NeoWebAppCookie");
+            }
+
             FetchUserRole(); // Fetch user role for view
             base.OnActionExecuting(context);
         }
+
 
         private bool IsUserAuthenticated()
         {
