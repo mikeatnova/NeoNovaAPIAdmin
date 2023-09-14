@@ -43,7 +43,7 @@ namespace NeoNovaAPIAdmin.Controllers
         }
 
 
-        private bool IsUserAuthenticated()
+        public bool IsUserAuthenticated()
         {
             var claims = _jwtExtractorHelper.GetClaimsFromJwt();
             if (claims != null)

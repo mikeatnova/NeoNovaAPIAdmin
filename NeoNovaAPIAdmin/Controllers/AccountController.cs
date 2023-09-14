@@ -62,8 +62,18 @@ namespace NeoNovaAPIAdmin.Controllers
         [AllowAnonymous]
         public IActionResult LoginPage()
         {
+            // Check if the user should be authenticated
+            bool isAuthenticated = IsUserAuthenticated();
+
+            if (!isAuthenticated)
+            {
+                // Invalidate the cookie if the user is not authenticated
+                HttpContext.Response.Cookies.Delete("NeoWebAppCookie");
+            }
+
             return View();
         }
+
 
         // Login Api request
         [AllowAnonymous]
