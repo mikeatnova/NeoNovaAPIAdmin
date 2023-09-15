@@ -1,5 +1,8 @@
 ﻿@{
+    ViewBag.StatusType = TempData["StatusType"];
+    ViewBag.StatusMessage = TempData["StatusMessage"];
 }
+
 
 <style>
     /* CSS for styling the aside section */
@@ -67,7 +70,7 @@
         <div class="col-md-9">
             <div>
                 <h1 class="display-4">Account</h1>
-                <p>@ViewBag.UserNameOrEmail</p>
+                <p>@ViewBag.Username</p>
             </div>
             <!-- Edit Profile Section -->
             <section class="edit-profile text-center">
@@ -112,8 +115,8 @@
             <div class="text-center">
                 @if (ViewBag.StatusMessage != null)
                 {
-                    <div class="alert alert-success" role="alert">
-                    @ViewBag.StatusMessage
+                    <div class="alert alert-@ViewBag.StatusType" role="alert">
+                        @ViewBag.StatusMessage
                     </div>
                 }
             </div>

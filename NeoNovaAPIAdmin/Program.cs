@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using NeoNovaAPIAdmin.Helpers;
+using NeoNovaAPIAdmin.Helpers.Middleware;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -98,6 +99,9 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<JwtClaimsMiddleware>();
+
 app.UseSession();
 
 app.MapControllerRoute(

@@ -16,10 +16,9 @@ namespace NeoNovaAPIAdmin.Controllers
     public class DataTablesController : CoreController
     {
         private readonly IConfiguration _configuration;
-        private readonly JwtExtractorHelper _jwtExtractorHelper;
 
-        public DataTablesController(JwtExtractorHelper jwtExtractorHelper, IConfiguration configuration)
-            : base(jwtExtractorHelper) // Call the base constructor with the required parameter
+        public DataTablesController(IConfiguration configuration)
+            : base() // Call the base constructor with the required parameter
         {
             _configuration = configuration;
         }
