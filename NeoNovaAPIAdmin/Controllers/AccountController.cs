@@ -15,13 +15,14 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace NeoNovaAPIAdmin.Controllers
 {
+
     public class AccountController : CoreController
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
 
-        public AccountController(IHttpClientFactory httpClientFactory, IConfiguration configuration, JwtExtractorHelper jwtExtractorHelper)
-            : base(jwtExtractorHelper) // Call the base constructor with the required parameter
+        public AccountController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+            : base() // Call the base constructor with the required parameter
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
@@ -30,9 +31,6 @@ namespace NeoNovaAPIAdmin.Controllers
         [Authorize(Roles = "Neo, Admin")]
         public IActionResult AccountPage(string message)
         {
-            var claimsIdentity = User.Identity as ClaimsIdentity;
-            ViewBag.UserNameOrEmail = claimsIdentity?.FindFirst(ClaimTypes.Name)?.Value;
-
             if (!string.IsNullOrEmpty(message))
             {
                 ViewBag.StatusMessage = message;
@@ -40,6 +38,7 @@ namespace NeoNovaAPIAdmin.Controllers
 
             return View();
         }
+
 
         // LOGIN
 

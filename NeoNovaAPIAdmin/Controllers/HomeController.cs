@@ -11,8 +11,8 @@ namespace NeoNovaAPIAdmin.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger, JwtExtractorHelper jwtExtractorHelper)
-            : base(jwtExtractorHelper) // Call the base constructor with the required parameter
+        public HomeController(ILogger<HomeController> logger)
+            : base() // Call the base constructor with the required parameter
         {
             _logger = logger;
         }

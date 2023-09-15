@@ -9,16 +9,13 @@ namespace NeoNovaAPIAdmin.Controllers
 {
     public class CoreController : Controller
     {
-        private readonly JwtExtractorHelper _jwtExtractorHelper;
-
-        public CoreController(JwtExtractorHelper jwtExtractorHelper)
+        public CoreController()
         {
-            _jwtExtractorHelper = jwtExtractorHelper;
         }
 
-        private void FetchUserStats()
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var claims = _jwtExtractorHelper.GetClaimsFromJwt();
+            var claims = HttpContext.Items["UserClaims"] as ClaimsPrincipal;
             if (claims != null)
             {
                 ViewBag.Role = claims.FindFirst(ClaimTypes.Role)?.Value;
@@ -26,10 +23,7 @@ namespace NeoNovaAPIAdmin.Controllers
                 ViewBag.Email = claims.FindFirst(ClaimTypes.Email)?.Value;
                 ViewBag.UserId = claims.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
             }
-        }
 
-        public override void OnActionExecuting(ActionExecutingContext context)
-        {
             bool isAuthenticated = IsUserAuthenticated();
             ViewBag.IsUserAuthenticated = isAuthenticated;
 
@@ -39,14 +33,13 @@ namespace NeoNovaAPIAdmin.Controllers
                 HttpContext.Response.Cookies.Delete("NeoWebAppCookie");
             }
 
-            FetchUserStats(); // Fetch user role for view
             base.OnActionExecuting(context);
         }
 
 
         public bool IsUserAuthenticated()
         {
-            var claims = _jwtExtractorHelper.GetClaimsFromJwt();
+            var claims = HttpContext.Items["UserClaims"] as ClaimsPrincipal;
             if (claims != null)
             {
                 var usernameClaim = claims.FindFirst(ClaimTypes.Name);

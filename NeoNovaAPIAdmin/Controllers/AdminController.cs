@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using NeoNovaAPIAdmin.Helpers;
 using NeoNovaAPIAdmin.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Text;
@@ -18,8 +19,8 @@ namespace NeoNovaAPIAdmin.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IConfiguration _configuration;
 
-        public AdminController(JwtExtractorHelper jwtExtractorHelper, IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
-            : base(jwtExtractorHelper) // Call the base constructor with the required parameter
+        public AdminController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
+            : base() // Call the base constructor with the required parameter
         {
             _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
@@ -71,14 +72,16 @@ namespace NeoNovaAPIAdmin.Controllers
                 // Handle the response
                 if (response.IsSuccessStatusCode)
                 {
+                    TempData["StatusType"] = "success";
                     TempData["StatusMessage"] = "User deleted successfully.";
                     return RedirectToAction("ListAllUsers");
                 }
                 else
                 {
+                    TempData["StatusType"] = "danger";
                     string errorResponse = await response.Content.ReadAsStringAsync();
                     TempData["StatusMessage"] = "Failed to delete user: " + errorResponse;
-                    return View("~/Views/Account/AccountPage.cshtml");
+                    return RedirectToAction("ListAllUsers");
                 }
             }
         }
@@ -101,15 +104,17 @@ namespace NeoNovaAPIAdmin.Controllers
 
                 if (!validationResponse.IsSuccessStatusCode)
                 {
-                    ViewBag.StatusMessage = "Current password is incorrect.";
-                    return View("~/Views/Account/AccountPage.cshtml");
+                    TempData["StatusType"] = "danger";
+                    TempData["StatusMessage"] = "Current password is incorrect";
+                    return RedirectToAction("AccountPage", "Account");
                 }
 
                 // Step 2: Check if the new password and retyped password match
                 if (newPassword != retypeNewPassword)
                 {
-                    ViewBag.StatusMessage = "The new password and retyped password must match.";
-                    return View("~/Views/Account/AccountPage.cshtml");
+                    TempData["StatusType"] = "danger";
+                    TempData["StatusMessage"] = "The new password and the retyped password must match";
+                    return RedirectToAction("AccountPage", "Account");
                 }
 
                 // Step 3: Proceed with the password reset
@@ -121,14 +126,16 @@ namespace NeoNovaAPIAdmin.Controllers
 
                 if (resetResponse.IsSuccessStatusCode)
                 {
-                    ViewBag.StatusMessage = "Password reset successfully.";
-                    return View("~/Views/Account/AccountPage.cshtml");
+                    TempData["StatusType"] = "success";
+                    TempData["StatusMessage"] = "Password reset successfully.";
+                    return RedirectToAction("AccountPage", "Account");
                 }
                 else
                 {
+                    TempData["StatusType"] = "danger";
                     string errorResponse = await resetResponse.Content.ReadAsStringAsync();
-                    ViewBag.StatusMessage = "Failed to reset password: " + errorResponse;
-                    return View("~/Views/Account/AccountPage.cshtml");
+                    TempData["StatusMessage"] = "Failed to reset password: " + errorResponse;
+                    return RedirectToAction("AccountPage", "Account");
                 }
             }
         }
@@ -136,32 +143,55 @@ namespace NeoNovaAPIAdmin.Controllers
 
         [Authorize(Roles = "Neo, Admin")]
         [HttpPost("ResetUserUsername")]
-        public async Task<IActionResult> ResetUserUsername([FromForm] string userId, [FromForm] string newUsername)
+        public async Task<IActionResult> ResetUserUsername([FromForm] string userId, [FromForm] string oldUsername, [FromForm] string newUsername)
         {
-            using (var httpClient = InitializeHttpClient())
+            // Validate old username
+            if (ViewBag.Username != null && ViewBag.Username.Equals(oldUsername))
             {
-                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
-                var resetUsernameObject = new { UserId = userId, NewUsername = newUsername };
-                var payload = JsonSerializer.Serialize(resetUsernameObject);
-                var content = new StringContent(payload, Encoding.UTF8, "application/json");
-
-                var response = await httpClient.PostAsync($"{baseUrl}/api/Auth/reset-username", content);
-
-                if (response.IsSuccessStatusCode)
+                using (var httpClient = InitializeHttpClient())
                 {
-                    ViewBag.UserNameOrEmail = newUsername;
-                    ViewBag.Username = newUsername;
-                    ViewBag.StatusMessage = "Username reset successfully.";
-                    return View("~/Views/Account/AccountPage.cshtml");
-                }
-                else
-                {
-                    string errorResponse = await response.Content.ReadAsStringAsync();
-                    ViewBag.StatusMessage = "Failed to reset username: " + errorResponse;
-                    return View("~/Views/Account/AccountPage.cshtml");
+                    string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
+                    var resetUsernameObject = new { UserId = userId, NewUsername = newUsername };
+                    var payload = JsonSerializer.Serialize(resetUsernameObject);
+                    var content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+                    var response = await httpClient.PostAsync($"{baseUrl}/api/Auth/reset-username", content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var result = await response.Content.ReadFromJsonAsync<TokenResponse>();
+                        if (result != null && !string.IsNullOrEmpty(result.Token))
+                        {
+                            HttpContext.Response.Cookies.Append("NeoWebAppCookie", result.Token);
+                            TempData["StatusType"] = "success";
+                            TempData["StatusMessage"] = "Username reset successfully.";
+                        }
+                        else
+                        {
+                            TempData["StatusType"] = "danger";
+                            TempData["StatusMessage"] = "Failed to reset username: Token is missing.";
+                        }
+
+                        return RedirectToAction("AccountPage", "Account");
+                    }
+
+                    else
+                    {
+                        string errorResponse = await response.Content.ReadAsStringAsync();
+                        TempData["StatusType"] = "danger";
+                        TempData["StatusMessage"] = "Failed to reset username: " + errorResponse;
+                        return RedirectToAction("AccountPage", "Account");
+                    }
                 }
             }
+            else
+            {
+                TempData["StatusType"] = "danger";
+                TempData["StatusMessage"] = "Old Username is incorrect";
+                return RedirectToAction("AccountPage", "Account");
+            }
         }
+
 
         [Authorize(Roles = "Neo")]
         [HttpPost]
