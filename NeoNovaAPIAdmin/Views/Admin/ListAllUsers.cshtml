@@ -29,14 +29,6 @@
     <h1 class="display-4">All Users <span>(@totalUsers)</span></h1>
     <p>Admin view of all registered users.</p>
 </div>
-<div>
-    @if (!String.IsNullOrEmpty((string)TempData["StatusMessage"]))
-    {
-        <div class="alert alert-info">
-            @TempData["StatusMessage"]
-        </div>
-    }
-</div>
 
 <div class="container">
     @if (roleToUsers.Count == 0)
@@ -95,5 +87,11 @@
                 </details>
             }
         }
+    }
+    @if (!String.IsNullOrEmpty(TempData["StatusMessage"] as string))
+    {
+        <div class="alert alert-info">
+            @TempData["StatusMessage"]
+        </div>
     }
 </div>
