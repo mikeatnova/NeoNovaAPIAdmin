@@ -102,10 +102,23 @@ namespace NeoNovaAPIAdmin.Controllers
 
                 var validationResponse = await httpClient.PostAsync($"{baseUrl}/api/Auth/{userId}/validate-password", validateContent);
 
-                if (!validationResponse.IsSuccessStatusCode)
+                if (validationResponse.IsSuccessStatusCode)
+                {
+                    var validationContent = await validationResponse.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Validation Content: {validationContent}");
+                    var validationJson = JsonSerializer.Deserialize<Dictionary<string, bool>>(validationContent);
+
+                    if (validationJson.TryGetValue("isValid", out bool isValidPassword) && !isValidPassword)
+                    {
+                        TempData["StatusType"] = "danger";
+                        TempData["StatusMessage"] = "Current password is incorrect";
+                        return RedirectToAction("AccountPage", "Account");
+                    }
+                }
+                else
                 {
                     TempData["StatusType"] = "danger";
-                    TempData["StatusMessage"] = "Current password is incorrect";
+                    TempData["StatusMessage"] = "Failed to validate the current password";
                     return RedirectToAction("AccountPage", "Account");
                 }
 
