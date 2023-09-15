@@ -31,6 +31,11 @@
                         </div>
 
                         <div class="form-group text-dark" style="background-color: #f2f2f2; padding: 10px;">
+                            <label for="retypePassword">Retype Password</label>
+                            <input type="password" id="retypePassword" name="RetypePassword" class="form-control" required />
+                        </div>
+
+                        <div class="form-group text-dark" style="background-color: #ffffff; padding: 10px;">
                             <label>Role</label>
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <div class="form-check form-check-inline">
@@ -56,7 +61,10 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-center" style="padding: 10px">
-                            <button type="submit" class="btn btn-primary">Seed User</button>
+                            <button type="submit" class="btn btn-primary"
+                                    onclick="return confirm('Are you sure you want to create this user, @ViewBag.Username?');">
+                                Seed User
+                            </button>
                         </div>
 
                         @if (TempData["GeneratedUsername"] != null)
