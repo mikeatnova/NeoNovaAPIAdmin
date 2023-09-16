@@ -214,7 +214,7 @@ namespace NeoNovaAPIAdmin.Controllers
             using var httpClient = InitializeHttpClient();
             // Prepare the payload
             string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
-            var seedUserObject = new { Email = email, Role = role, Password = password };  // Added password to payload
+            var seedUserObject = new { Email = email, Role = role, Password = password };
             var payload = JsonSerializer.Serialize(seedUserObject);
             var content = new StringContent(payload, Encoding.UTF8, "application/json");
 
