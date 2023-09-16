@@ -19,9 +19,25 @@ namespace NeoNovaAPIAdmin.Helpers.Middleware
             var claims = jwtExtractorHelper.GetClaimsFromJwt();
             if (claims != null)
             {
-                context.Items["UserClaims"] = claims;
+                var expiryClaim = claims.FindFirst("exp");
+                if (expiryClaim != null)
+                {
+                    var expiryUnixTime = long.Parse(expiryClaim.Value);
+                    var expiryDateTime = DateTimeOffset.FromUnixTimeSeconds(expiryUnixTime);
+                    if (DateTimeOffset.UtcNow > expiryDateTime)
+                    {
+                        // Token is expired, clear it
+                        context.Response.Cookies.Delete("NeoWebAppCookie");
+                        context.Items["UserClaims"] = null;
+                    }
+                    else
+                    {
+                        context.Items["UserClaims"] = claims;
+                    }
+                }
             }
             await _next(context);
         }
+
     }
 }
