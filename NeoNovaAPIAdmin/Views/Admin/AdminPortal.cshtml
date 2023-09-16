@@ -20,7 +20,7 @@
 @if (isNeo)
 {
     <div class="d-flex">
-        <div class="card" style="width: 30rem;">
+        <div class="card" style="width: 45rem;">
             <div class="card-body">
 
                 <section id="seed-user-section">
@@ -44,11 +44,13 @@
 
                         <div class="form-group text-dark" style="background-color: #ffffff; padding: 10px;">
                             <label>Role</label>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
+
+                            <div style="display: flex; align-items: center;">
+
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Role" id="CommonUser" value="CommonUser" required>
-                                    <label class="form-check-label" for="CommonUser">
-                                        CommonUser
+                                    <input class="form-check-input" type="radio" name="Role" id="Neo" value="Neo">
+                                    <label class="form-check-label" for="Neo">
+                                        Neo
                                     </label>
                                 </div>
 
@@ -60,27 +62,55 @@
                                 </div>
 
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Role" id="Neo" value="Neo">
-                                    <label class="form-check-label" for="Neo">
-                                        Neo
+                                    <input class="form-check-input" type="radio" name="Role" id="CommonUser" value="CommonUser" required>
+                                    <label class="form-check-label" for="CommonUser">
+                                        Common User
+                                    </label>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="Role" id="SecurityChief" value="SecurityChief">
+                                    <label class="form-check-label" for="SecurityChief">
+                                        Security Chief
+                                    </label>
+                                </div>
+
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="Role" id="SecurityManager" value="SecurityManager">
+                                    <label class="form-check-label" for="SecurityManager">
+                                        Security Manager
+                                    </label>
+                                </div>
+
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="Role" id="SecuritySupervisor" value="SecuritySupervisor">
+                                    <label class="form-check-label" for="SecuritySupervisor">
+                                        Security Supervisor
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="Role" id="SecurityOfficer" value="SecurityOfficer" required>
+                                    <label class="form-check-label" for="SecurityOfficer">
+                                        Security Officer
                                     </label>
                                 </div>
                             </div>
                         </div>
+
                         <div class="d-flex justify-content-center" style="padding: 10px">
                             <button type="submit" class="btn btn-primary"
                                     onclick="return confirm('Are you sure you want to create this user, @ViewBag.Username?');">
                                 Seed User
                             </button>
                         </div>
-
                         @if (TempData["GeneratedUsername"] != null)
                         {
                             <div class="text-center text-dark">
                                 Generated Username: @TempData["GeneratedUsername"]
                             </div>
                         }
-
                     </form>
                 </section>
             </div>

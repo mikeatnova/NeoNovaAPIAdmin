@@ -3,7 +3,7 @@
 
 @{
     // Custom order of roles
-    string[] roleOrder = { "Neo", "Admin", "CommonUser" };
+    string[] roleOrder = { "Neo", "Admin", "SecurityChief", "SecurityManager", "SecuritySupervisor", "SecurityOfficer", "CommonUser" };
 
     Dictionary<string, List<AllUser>> roleToUsers = new Dictionary<string, List<AllUser>>();
     int totalUsers = 0;
@@ -76,7 +76,7 @@
                                         <td>
                                             <form asp-controller="Admin" asp-action="DeleteUser" method="post">
                                                 <input type="hidden" name="userId" value="@user.Id" />
-                                                <input type="submit" class="btn btn-danger deleteBtn" value="Delete" onclick="return confirm('Are you sure you want to delete this user?');" />
+                                                <input type="submit" class="btn btn-danger deleteBtn" value="Delete" />
                                             </form>
                                         </td>
                                     </tr>
