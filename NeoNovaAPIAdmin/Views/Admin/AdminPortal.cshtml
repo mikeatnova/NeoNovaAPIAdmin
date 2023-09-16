@@ -6,13 +6,20 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Admin Portal</h1>
-    <p>Stats Stats Stats. This will be the home page for admins, showing brief stats of the db health</p>
+    <h1 class="display-4">{@ViewBag.Role} Portal</h1>
+    @if (isNeo)
+    {
+        <p>lord @ViewBag.Username, your system awaits your command...</p>
+    }
+    else
+    {
+        <p>Welcome @ViewBag.Username</p>
+    }
 </div>
 
 @if (isNeo)
 {
-    <div class="d-flex justify-content-center">
+    <div class="d-flex">
         <div class="card" style="width: 30rem;">
             <div class="card-body">
 
