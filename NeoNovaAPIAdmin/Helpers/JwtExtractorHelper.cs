@@ -22,7 +22,7 @@ namespace NeoNovaAPIAdmin.Helpers
 
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(token);
-            var identity = new ClaimsIdentity(jwtToken.Claims, "custom");
+            var identity = new ClaimsIdentity(jwtToken.Claims, "nebuchadnezzar");
             var principal = new ClaimsPrincipal(identity);
 
             return principal;
