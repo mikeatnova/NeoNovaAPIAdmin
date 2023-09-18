@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NeoNovaAPIAdmin.Helpers;
 using NeoNovaAPIAdmin.Models;
+using NeoNovaAPIAdmin.Models.DataModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
@@ -235,6 +236,29 @@ namespace NeoNovaAPIAdmin.Controllers
             // Redirect to error page for any failures
             return View("Error");
             
+        }
+
+        [Authorize(Roles = "Neo, Admin")]
+        [HttpGet]
+        public async Task<IActionResult> dbsets()
+        {
+            using var httpClient = InitializeHttpClient(); // Assuming InitializeHttpClient is a method that sets up HttpClient
+            string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
+
+            var response = await httpClient.GetAsync($"{baseUrl}/api/metadata/all");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var tableInfos = JsonSerializer.Deserialize<List<TableInfo>>(content, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+                return View(tableInfos);
+            }
+            else
+            {
+                TempData["StatusType"] = "danger";
+                TempData["StatusMessage"] = "Failed to fetch table data.";
+                return RedirectToAction("AdminPortal");
+            }
         }
     }
 }
