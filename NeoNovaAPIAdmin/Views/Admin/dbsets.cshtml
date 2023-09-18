@@ -1,0 +1,52 @@
+﻿@using NeoNovaAPIAdmin.Models.DataModels;
+@{
+}
+
+@model List<TableInfo>
+
+<div class="text-center">
+    <h1 class="display-4">All Tables <span>(@Model.Count)</span></h1>
+    <p>Admin view of all tables in the database.</p>
+</div>
+
+<div class="container">
+    @if (Model.Count == 0)
+    {
+        <h2>No Tables</h2>
+    }
+    else
+    {
+        @foreach (var table in Model)
+        {
+            <details>
+                <summary>
+                    <h2 style="display:inline;">@table.TableName</h2>
+                    <span>(@table.NumberOfRecords)</span>
+                </summary>
+                <div class="button-row">
+                    <button class="btn btn-primary getBtn">GET</button>
+                    <button class="btn btn-success postBtn">POST</button>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr class="text-light">
+                            @foreach (var column in table.ColumnNames)
+                            {
+                                <th>@column</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Your Dynamic Content Here -->
+                    </tbody>
+                </table>
+            </details>
+        }
+    }
+    @if (!String.IsNullOrEmpty(TempData["StatusMessage"] as string))
+    {
+        <div class="alert alert-info">
+            @TempData["StatusMessage"]
+        </div>
+    }
+</div>
