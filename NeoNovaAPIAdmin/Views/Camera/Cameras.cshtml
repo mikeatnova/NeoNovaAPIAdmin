@@ -44,6 +44,11 @@
             </tr>
             <tr>
                 <td>
+                    <input type="text" name="Notes" placeholder="Notes" />
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <input type="text" name="CurrentStatus" value="Unboxed" readonly />
                 </td>
             </tr>
@@ -117,6 +122,26 @@
                                     }
                             </td>
                         </tr>
+                        <tr class ="text-light">
+                            <td colspan="7" class="notes-cell">
+                                <details class="camera-group">
+                                    <summary>
+                                        <strong >Notes</strong>
+                                    </summary>
+                                    <div>
+                                            @if (!String.IsNullOrEmpty(camera.Notes))
+                                            {
+                                                @Html.Raw(camera.Notes)
+                                            }
+                                            else
+                                            {
+                                            <span>No notes available.</span>
+                                            }
+                                    </div>
+                                </details>
+                            </td>
+                        </tr>
+
                         </form>
                     }
                 </tbody>

@@ -2,6 +2,8 @@
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
+using NeoNovaAPIAdmin.Helpers;
+using System.Security.Claims;
 
 namespace NeoNovaAPIAdmin.Controllers.Security
 {
@@ -9,10 +11,12 @@ namespace NeoNovaAPIAdmin.Controllers.Security
     public class CameraController : CoreController
     {
         private readonly IConfiguration _configuration;
+        private readonly JwtExtractorHelper _jwtExtractorHelper;
 
-        public CameraController(IConfiguration configuration)
+        public CameraController(IConfiguration configuration, JwtExtractorHelper jwtExtractorHelper)
             : base() // Call the base constructor with the required parameter
         {
+            _jwtExtractorHelper = jwtExtractorHelper;
             _configuration = configuration;
         }
 
@@ -64,6 +68,14 @@ namespace NeoNovaAPIAdmin.Controllers.Security
                 DateTime currentTime = DateTime.UtcNow;
                 camera.CreatedAt = currentTime;
                 camera.ModifiedAt = currentTime;
+
+                var claims = _jwtExtractorHelper.GetClaimsFromJwt();
+                string username = claims?.FindFirst(ClaimTypes.Name)?.Value ?? "Unknown";
+                if (!string.IsNullOrWhiteSpace(camera.Notes))
+                {
+                    string formattedTime = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+                    camera.Notes = $"{username} ({formattedTime}): {camera.Notes}";
+                }
                 var json = JsonSerializer.Serialize(camera);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 var response = await httpClient.PostAsync($"{baseUrl}/api/Camera", content);
