@@ -1,0 +1,131 @@
+﻿@using NeoNovaAPIAdmin.Helpers
+@inject JwtExtractorHelper JwtExtractor
+@using NeoNovaAPIAdmin.Models.SecurityModels;
+
+@{
+    var userClaims = JwtExtractor.GetClaimsFromJwt();
+    var isNeo = userClaims?.IsInRole("Neo") ?? false;
+    var groupedCameras = Model.GroupBy(camera => camera.LocationId);
+}
+
+@model List<Camera>
+
+<div class="text-center">
+    <h1 class="display-4">Cameras Page <span>(@(Model?.Count() ?? 0))</span></h1>
+    <p>These are the Cameras</p>
+
+    @if (isNeo)
+    {
+        <button class="btn btn-success newButton" data-form="newForm">New +</button>
+    }
+</div>
+
+<div id="newFormDiv">
+    <form id="newForm" class="newForm" action="@Url.Action("AddCamera")" method="post" style="display: none;">
+        <table class="text-light">
+            <tr>
+                <td><input type="text" name="Name" placeholder="Camera Name" required /></td>
+            </tr>
+            <tr>
+                <td>
+                    <select name="LocationId" required>
+                        <option value="" disabled selected>-- Select Location --</option>
+                        <option value="1">Attleboro, Massachusetts</option>
+                        <option value="2">Framingham, Massachusetts</option>
+                        <option value="3">Sheffield, Massachusetts</option>
+                        <option value="4">Dracut, Massachusetts</option>
+                        <option value="5">Pawtucket, Rhode Island</option>
+                        <option value="6">Central Falls, Rhode Island</option>
+                        <option value="7">Thorndike, Maine</option>
+                        <option value="8">Greenville Junction, Maine</option>
+                        <option value="9">Woodbury, New Jersey</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" name="CurrentStatus" value="Unboxed" readonly />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="button" class="btn btn-danger cancelButton">Cancel</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+
+@if (Model != null && Model.Any())
+{
+    foreach (var locationGroup in groupedCameras)
+    {
+        <details class="camera-group">
+            <summary>
+                <h2 style="display:inline;">@ViewBag.LocationMap[locationGroup.Key].Item1, @ViewBag.LocationMap[locationGroup.Key].Item2</h2>
+                <span>(@locationGroup.Count())</span>
+            </summary>
+
+            <table class="table">
+                <thead>
+                    <tr class="text-light">
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Current Status</th>
+                        <th>Last Modified</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var camera in locationGroup)
+                    {
+                        <form action="@Url.Action("PutCamera", new { id = camera.ID })" method="post">
+                        <tr class="text-light">
+                            <input type="hidden" name="ID" value="@camera.ID" />
+                            <td><span class="text">@camera.ID</span></td>
+                            <td>
+                                <span class="text">@camera.Name</span>
+                                <textarea name="Name" class="form-control edit" style="display:none;">@camera.Name</textarea>
+                            </td>
+                            <td>
+                                <span class="text">@ViewBag.LocationMap[camera.LocationId].Item1, @ViewBag.LocationMap[camera.LocationId].Item2</span>
+                                <textarea name="LocationId" class="form-control edit" style="display:none;">@camera.LocationId</textarea>
+                            </td>
+                            <td>
+                                <span class="text">@camera.CurrentStatus</span>
+                                <textarea name="CurrentStatus" class="form-control edit" style="display:none;">@camera.CurrentStatus</textarea>
+                            </td>
+                            <td><span class="text">@camera.ModifiedAt</span></td>
+                            <td><span class="text">@camera.CreatedAt</span></td>
+                            <td>
+                                    @if (isNeo)
+                                    {
+                                    <div class="action-buttons">
+                                        <div class="button-row">
+                                            <button type="button" class="btn btn-primary editBtn">Update</button>
+                                            <div class="edit-actions" style="display:none;">
+                                                <button type="submit" class="btn btn-success saveBtn">Save</button>
+                                                <button type="button" class="btn btn-danger cancelBtn">Cancel</button>
+                                            </div>
+                                            <button type="button" class="btn btn-danger deleteBtn" data-url="@Url.Action("DeleteCamera", new { id = camera.ID })">Delete</button>
+                                        </div>
+                                    </div>
+                                    }
+                            </td>
+                        </tr>
+                        </form>
+                    }
+                </tbody>
+            </table>
+        </details>
+    }
+}
+else
+{
+    <p>No Cameras found.</p>
+}
+

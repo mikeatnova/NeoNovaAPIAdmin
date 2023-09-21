@@ -1,14 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NeoNovaAPIAdmin.Helpers;
-using NeoNovaAPIAdmin.Models.DbModels;
 using System.Text.Json;
-using System.Net.Http;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Text;
-using System.Net.Http.Headers;
-using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace NeoNovaAPIAdmin.Controllers
 {

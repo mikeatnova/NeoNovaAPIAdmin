@@ -1,0 +1,109 @@
+﻿@using NeoNovaAPIAdmin.Helpers
+@inject JwtExtractorHelper JwtExtractor
+@using NeoNovaAPIAdmin.Models.SecurityModels;
+
+@{
+    var userClaims = JwtExtractor.GetClaimsFromJwt();
+    var isNeo = userClaims?.IsInRole("Neo") ?? false;
+    var groupedLocations = Model.GroupBy(l => l.State).OrderBy(g => g.Key);
+}
+
+@model List<Location>
+
+<div class="text-center">
+    <h1 class="display-4">Locations Page</h1>
+    <p>These are the Locations</p>
+
+    @if (isNeo)
+    {
+        <button class="btn btn-success newButton" data-form="newForm">New +</button>
+    }
+</div>
+
+<div id="newFormDiv">
+    <form id="newForm" class="newForm" action="@Url.Action("AddLocation")" method="post" style="display: none;">
+        <table class="text-light">
+            <tr>
+                <td><input type="text" name="Name" placeholder="Address" required /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="City" placeholder="City" required /></td>
+            </tr>
+            <tr>
+                <td><input type="text" name="State" placeholder="State" required /></td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="button" class="btn btn-danger cancelButton">Cancel</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+@if (groupedLocations.Any())
+{
+    foreach (var stateGroup in groupedLocations)
+    {
+        <details class="state-group">
+            <summary>
+                <h2 style="display:inline;">@stateGroup.Key</h2>
+                <span>(@stateGroup.Count())</span>
+            </summary>
+            <table class="table">
+                <thead>
+                    <tr class="text-light">
+                        <th>ID</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var location in stateGroup)
+                    {
+                        <form action="@Url.Action("PutLocation", new { id = location.ID })" method="post">
+                        <tr class="text-light">
+                            <input type="hidden" name="ID" value="@location.ID" />
+                            <td><span class="text">@location.ID</span></td>
+                            <td>
+                                <span class="text">@location.Name</span>
+                                <textarea name="Name" class="form-control edit" style="display:none;">@location.Name</textarea>
+                            </td>
+                            <td>
+                                <span class="text">@location.City</span>
+                                <textarea name="City" class="form-control edit" style="display:none;">@location.City</textarea>
+                            </td>
+                            <td>
+                                <span class="text">@location.State</span>
+                                <textarea name="State" class="form-control edit" style="display:none;">@location.State</textarea>
+                            </td>
+                            <td>
+                                    @if (isNeo)
+                                    {
+                                    <div class="action-buttons">
+                                        <div class="button-row">
+                                            <button type="button" class="btn btn-primary editBtn">Update</button>
+                                            <div class="edit-actions" style="display:none;">
+                                                <button type="submit" class="btn btn-success saveBtn">Save</button>
+                                                <button type="button" class="btn btn-danger cancelBtn">Cancel</button>
+                                            </div>
+                                            <button type="button" class="btn btn-danger deleteBtn" data-url="@Url.Action("DeleteLocation", new { id = location.ID })">Delete</button>
+                                        </div>
+                                    </div>
+                                    }
+                            </td>
+                        </tr>
+                        </form>
+                    }
+                </tbody>
+            </table>
+        </details>
+    }
+}
+else
+{
+    <p>No Locations found.</p>
+}

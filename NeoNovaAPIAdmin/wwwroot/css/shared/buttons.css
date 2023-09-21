@@ -31,3 +31,8 @@
         background-color: #86ba48; /* Slightly darker shade of the action color */
         cursor: pointer;
     }
+
+.button-row {
+    display: flex;
+    justify-content: space-around;
+}
