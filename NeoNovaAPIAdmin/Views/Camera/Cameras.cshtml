@@ -30,15 +30,10 @@
                 <td>
                     <select name="LocationId" required>
                         <option value="" disabled selected>-- Select Location --</option>
-                        <option value="1">Attleboro, Massachusetts</option>
-                        <option value="2">Framingham, Massachusetts</option>
-                        <option value="3">Sheffield, Massachusetts</option>
-                        <option value="4">Dracut, Massachusetts</option>
-                        <option value="5">Pawtucket, Rhode Island</option>
-                        <option value="6">Central Falls, Rhode Island</option>
-                        <option value="7">Thorndike, Maine</option>
-                        <option value="8">Greenville Junction, Maine</option>
-                        <option value="9">Woodbury, New Jersey</option>
+                        @foreach (var location in ViewBag.LocationMap)
+                        {
+                            <option value="@location.Key">@location.Value.Item1, @location.Value.Item2</option>
+                        }
                     </select>
                 </td>
             </tr>

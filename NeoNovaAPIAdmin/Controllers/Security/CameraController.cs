@@ -43,21 +43,34 @@ namespace NeoNovaAPIAdmin.Controllers.Security
         public async Task<IActionResult> Cameras()
         {
             string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
-            Dictionary<int, Tuple<string, string>> locationMap = new Dictionary<int, Tuple<string, string>>()
+
+            using (var httpClient = InitializeHttpClient())
             {
-                {1, Tuple.Create("Attleboro", "Massachusetts")},
-                {2, Tuple.Create("Framingham", "Massachusetts")},
-                {3, Tuple.Create("Sheffield", "Massachusetts")},
-                {4, Tuple.Create("Dracut", "Massachusetts")},
-                {5, Tuple.Create("Pawtucket", "Rhode Island")},
-                {6, Tuple.Create("Central Falls", "Rhode Island")},
-                {7, Tuple.Create("Thorndike", "Maine")},
-                {8, Tuple.Create("Greenville Junction", "Maine")},
-                {9, Tuple.Create("Woodbury", "New Jersey")}
-            };
-            ViewBag.LocationMap = locationMap;
-            return await GetViewAsync<Models.SecurityModels.Camera>($"{baseUrl}/api/Camera");
+                // Fetch Cameras
+                var cameraResponse = await httpClient.GetAsync($"{baseUrl}/api/Camera");
+                // Fetch Locations
+                var locationResponse = await httpClient.GetAsync($"{baseUrl}/api/Location");
+
+                if (cameraResponse.IsSuccessStatusCode && locationResponse.IsSuccessStatusCode)
+                {
+                    var cameraContent = await cameraResponse.Content.ReadAsStringAsync();
+                    var locationContent = await locationResponse.Content.ReadAsStringAsync();
+
+                    var cameraOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+                    var locationOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+
+                    var cameras = JsonSerializer.Deserialize<List<Models.SecurityModels.Camera>>(cameraContent, cameraOptions);
+                    var locations = JsonSerializer.Deserialize<List<Models.SecurityModels.Location>>(locationContent, locationOptions);
+
+                    // Map LocationId to Location objects
+                    ViewBag.LocationMap = locations.ToDictionary(l => l.ID, l => Tuple.Create(l.Name, l.State)); // O(N)
+
+                    return View(cameras);
+                }
+            }
+            return View(new List<Models.SecurityModels.Camera>());
         }
+
 
         [HttpPost]
         public async Task<IActionResult> AddCamera(Models.SecurityModels.Camera camera)
