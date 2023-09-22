@@ -1,6 +1,7 @@
 ﻿@using NeoNovaAPIAdmin.Helpers
 @inject JwtExtractorHelper JwtExtractor
 @using NeoNovaAPIAdmin.Models.SecurityModels;
+@using System.Text.RegularExpressions;
 
 @{
     var userClaims = JwtExtractor.GetClaimsFromJwt();
@@ -124,14 +125,15 @@
                                         <strong >Notes</strong>
                                     </summary>
                                     <div>
-                                            @if (!String.IsNullOrEmpty(camera.Notes))
-                                            {
-                                                @Html.Raw(camera.Notes)
-                                            }
-                                            else
-                                            {
-                                            <span>No notes available.</span>
-                                            }
+                                        @if (!String.IsNullOrEmpty(camera.Notes))
+                                        {
+                                            string convertedNotes = ConvertNotesTimeToEastern(camera.Notes);
+                                            @Html.Raw(convertedNotes)
+                                        }
+                                        else
+                                        {
+                                        <span>No notes available.</span>
+                                        }
                                     </div>
                                 </details>
                             </td>
@@ -149,3 +151,22 @@ else
     <p>No Cameras found.</p>
 }
 
+@functions {
+    public static string ConvertNotesTimeToEastern(string notes)
+    {
+        Regex regex = new Regex(@"\(([^)]+)\)");
+        return regex.Replace(notes, m => "[" + ConvertToEasternTime(m.Groups[1].Value) + "]");
+    }
+
+    public static string ConvertToEasternTime(string dateTimeString)
+    {
+        DateTime utcDateTime;
+        if (DateTime.TryParse(dateTimeString, out utcDateTime))
+        {
+            TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            DateTime easternTime = TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, easternZone);
+            return easternTime.ToString("MM.dd.yyyy hh:mm:ss tt"); // Now in AM/PM format
+        }
+        return dateTimeString;
+    }
+}
