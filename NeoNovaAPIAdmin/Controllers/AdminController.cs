@@ -238,6 +238,76 @@ namespace NeoNovaAPIAdmin.Controllers
             
         }
 
+        // PALANTIR MESSAGES
+
+        [HttpGet]
+        public async Task<IActionResult> Palantir()
+        {
+            string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
+            return await GetViewAsync<Models.Messaging.PalantirMessage>($"{baseUrl}/api/PalantirMessages");
+        }
+
+        // Add PalantirMessage
+        [HttpPost]
+        public async Task<IActionResult> AddPalantirMessage(Models.Messaging.PalantirMessage palantirMessage)
+        {
+            using (var httpClient = InitializeHttpClient())
+            {
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
+                var json = JsonSerializer.Serialize(palantirMessage);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await httpClient.PostAsync($"{baseUrl}/api/PalantirMessages", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("PalantirMessages");
+                }
+            }
+            return View("Error");
+        }
+
+        // Update PalantirMessage
+        [HttpPost]
+        public async Task<IActionResult> PutPalantirMessage(int id, Models.Messaging.PalantirMessage palantirMessage)
+        {
+            using (var httpClient = InitializeHttpClient())
+            {
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
+                var json = JsonSerializer.Serialize(palantirMessage);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await httpClient.PutAsync($"{baseUrl}/api/PalantirMessages/{id}", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("PalantirMessages");
+                }
+            }
+            return View("Error");
+        }
+
+        // Delete PalantirMessage
+        [HttpPost]
+        public async Task<IActionResult> DeletePalantirMessage(int id)
+        {
+            using (var httpClient = InitializeHttpClient())
+            {
+                string baseUrl = _configuration.GetValue<string>("NeoNovaApiBaseUrl");
+                var response = await httpClient.DeleteAsync($"{baseUrl}/api/PalantirMessages/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("PalantirMessages");
+                }
+            }
+            return View("Error");
+        }
+
+
+
+
+
+
+
+
+
+
         [Authorize(Roles = "Neo, Admin")]
         [HttpGet]
         public async Task<IActionResult> dbsets()
