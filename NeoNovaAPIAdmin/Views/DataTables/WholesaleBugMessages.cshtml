@@ -1,9 +1,6 @@
 ﻿@using NeoNovaAPIAdmin.Helpers
 @inject JwtExtractorHelper JwtExtractor
 @using NeoNovaAPIAdmin.Models.DbModels;
-@{
-
-}
 
 @model List<WholesaleBugMessage>
 @{
@@ -26,7 +23,6 @@
             foreach (var message in Model)
             {
                 <div class="col-12 d-flex align-items-start" style="margin-bottom: 20px;">
-                    <!-- Added margin-bottom -->
                     <input type="checkbox" class="form-check-input mt-3 mr-3" id="@message.Id" style="margin-right: 20px;" />
                     <div class="card w-100">
                         <div class="card-header text-dark">

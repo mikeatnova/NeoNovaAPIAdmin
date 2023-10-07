@@ -23,5 +23,8 @@ namespace NeoNovaAPIAdmin.Models.SecurityModels
         public string State { get; set; }
 
         public List<CameraLocation>? CameraLocations { get; set; }
+
+        [Required]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
