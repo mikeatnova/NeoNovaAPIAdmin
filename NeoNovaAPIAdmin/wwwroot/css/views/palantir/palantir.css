@@ -1,0 +1,43 @@
+﻿.bg-corpsec {
+    background: linear-gradient(to right, darkblue, black);
+}
+
+.bg-wholesale {
+    background: linear-gradient(to right, darkred, black);
+}
+
+.bg-novaapp {
+    background: linear-gradient(to right, green, black);
+}
+
+.bg-default {
+    background: #fff;
+}
+
+.form-check-input {
+    margin-right: 4px;
+}
+
+.palantir-id {
+    font-family:  Cambria;
+}
+
+.palantir-title {
+    font-family:  Cambria;
+    letter-spacing: 2px;
+    font-size: 22px;
+}
+
+.palantir-text {
+    color: white;
+}
+
+.palantir-row {
+    margin-top: 8px;
+}
+
+.realm-label {
+    font-family: Cooper;
+    letter-spacing: 3px;
+    font-size: 22px;
+}
