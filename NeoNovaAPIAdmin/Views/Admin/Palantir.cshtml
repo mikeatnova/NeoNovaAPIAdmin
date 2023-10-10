@@ -5,6 +5,14 @@
 @model List<PalantirMessage>
 @{
     Model.Reverse();
+    var wholesaleMessages = Model.Where(m => m.Realm == "Wholesale");
+    var corpsecMessages = Model.Where(m => m.Realm == "CorpSec");
+    var novaAppMessages = Model.Where(m => m.Realm == "NovaApp");
+    // Count unread messages in each category using the Status field.
+    int unreadWholesaleMessages = wholesaleMessages.Count(m => m.Status == "Unread");
+    int unreadCorpsecMessages = corpsecMessages.Count(m => m.Status == "Unread");
+    int unreadNovaAppMessages = novaAppMessages.Count(m => m.Status == "Unread");
+    
 }
 
 <div class="text-center">
@@ -16,40 +24,155 @@
     }
 </div>
 
-<div class="container">
-    <div class="row">
-        @if (Model != null && Model.Any())
-        {
-            @foreach (var message in Model)
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="tab" href="#wholesale">
+            Wholesale <span class="badge bg-secondary">@unreadWholesaleMessages</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#corpsec">
+            CorpSec <span class="badge bg-secondary">@unreadCorpsecMessages</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#novaapp">
+            Nova App <span class="badge bg-secondary">@unreadNovaAppMessages</span>
+        </a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <!-- Wholesale Tab -->
+    <div id="wholesale" class="container tab-pane fade show active">
+        <div class="palantir-row">
+            @if (wholesaleMessages != null && wholesaleMessages.Any())
             {
-                <div class="col-12 d-flex align-items-start mb-2">
-                    <input type="checkbox" class="form-check-input mt-0 mr-3" id="@message.Id" />
-                    <details class="card w-100 mb-0">
-                        <summary class="card-header text-dark d-flex justify-content-between align-items-center mb-0">
-                            <label class="form-check-label mb-0" for="@message.Id">@message.Title</label>
-                            <div class="form-check-label mb-0">
-                                <label for="@message.Id">@message.Realm</label>
-                                <label> | </label>
-                                <label for="@message.Id">@message.Status</label>
+                @foreach (var message in wholesaleMessages)
+                {
+                    var gradientClass = "bg-wholesale";  // As these are Wholesale messages
+
+                    <div class="col-12 d-flex align-items-start mb-2">
+                        <input type="checkbox" style="align-self: center" class="form-check-input mt-0 mr-3" id="@message.Id" />
+                        <details class="card w-100 mb-0 palantir-card @gradientClass">
+                            <summary class="card-header text-dark d-flex justify-content-between align-items-center mb-0">
+                                <div class ="form-check-label mb-0">
+                                    <label class="palantir-text palantir-id" for="@message.Id">#@message.Id</label>
+                                    <label class="palantir-text palantir-title" for="@message.Id">@message.Title</label>
+                                </div>
+
+                                <div class="form-check-label mb-0">
+                                    <label class="form-check-label realm-label mb-0 palantir-text" for="@message.Id">@message.Realm</label>
+                                    <label> | </label>
+                                    <label class="palantir-text" for="@message.Id">@message.Status</label>
+                                </div>
+                            </summary>
+                            <div class="card-body text-dark mb-0">
+                                <p class="mb-0 palantir-text">@message.MessageBody</p>
                             </div>
-                        </summary>
-                        <div class="card-body text-dark mb-0">
-                            <p class="mb-0">@message.MessageBody</p>
-                        </div>
-                        <div class="card-footer text-dark mb-0">
-                            <small>ID: @message.Id</small><br />
-                            <small>Realm: @message.Realm</small><br />
-                            <small>Sent by: @message.Username</small><br />
-                            <small>Urgency: @message.UrgencyRating</small><br />
-                            <small>Date: @TimeZoneInfo.ConvertTimeFromUtc(message.CreatedAt.ToUniversalTime(), TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")).ToString("MM/dd/yyyy hh:mm tt")</small><br />
-                        </div>
-                    </details>
-                </div>
+                            <div class="card-footer palantir-text text-dark mb-0">
+                                <small class="palantir-text">ID: @message.Id</small><br />
+                                <small class="palantir-text">Realm: @message.Realm</small><br />
+                                <small class="palantir-text">Sent by: @message.Username</small><br />
+                                <small class="palantir-text">Urgency: @message.UrgencyRating</small><br />
+                                <small class="palantir-text">Date: @TimeZoneInfo.ConvertTimeFromUtc(message.CreatedAt.ToUniversalTime(), TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")).ToString("MM/dd/yyyy hh:mm tt")</small><br />
+                            </div>
+                        </details>
+                    </div>
+                }
             }
-        }
-        else
-        {
-            <p>No Palantir Messages found.</p>
-        }
+            else
+            {
+                <p>No Wholesale Palantir Messages found.</p>
+            }
+        </div>
+    </div>
+
+    <!-- CorpSec Tab -->
+    <div id="corpsec" class="container tab-pane fade">
+        <div class="palantir-row">
+            @if (corpsecMessages != null && corpsecMessages.Any())
+            {
+                @foreach (var message in corpsecMessages)
+                {
+                    var gradientClass = "bg-corpsec";  // As these are CorpSec messages
+
+                    <div class="col-12 d-flex align-items-start mb-2">
+                        <input type="checkbox" style="align-self: center" class="form-check-input mt-0 mr-3" id="@message.Id" />
+                        <details class="card w-100 mb-0 palantir-card @gradientClass">
+                            <summary class="card-header text-dark d-flex justify-content-between align-items-center mb-0">
+                                <div class="form-check-label mb-0">
+                                    <label class="palantir-text" for="@message.Id">#@message.Id</label>
+                                    <label class="palantir-text palantir-title" for="@message.Id">@message.Title</label>
+                                </div>
+                                <div class="form-check-label mb-0">
+                                    <label class="form-check-label realm-label mb-0 palantir-text" for="@message.Id">@message.Realm</label>
+                                    <label> | </label>
+                                    <label class="palantir-text" for="@message.Id">@message.Status</label>
+                                </div>
+                            </summary>
+                            <div class="card-body text-dark mb-0">
+                                <p class="mb-0 palantir-text">@message.MessageBody</p>
+                            </div>
+                            <div class="card-footer palantir-text text-dark mb-0">
+                                <small class="palantir-text">ID: @message.Id</small><br />
+                                <small class="palantir-text">Realm: @message.Realm</small><br />
+                                <small class="palantir-text">Sent by: @message.Username</small><br />
+                                <small class="palantir-text">Urgency: @message.UrgencyRating</small><br />
+                                <small class="palantir-text">Date: @TimeZoneInfo.ConvertTimeFromUtc(message.CreatedAt.ToUniversalTime(), TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")).ToString("MM/dd/yyyy hh:mm tt")</small><br />
+                            </div>
+                        </details>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No CorpSec Palantir Messages found.</p>
+            }
+        </div>
+    </div>
+
+    <!-- NovaApp Tab -->
+    <div id="novaapp" class="container tab-pane fade">
+        <div class="palantir-row">
+            @if (novaAppMessages != null && novaAppMessages.Any())
+            {
+                @foreach (var message in novaAppMessages)
+                {
+                    var gradientClass = "bg-novaapp";  // As these are Nova APp messages
+
+                    <div class="col-12 d-flex align-items-start mb-2">
+                        <input type="checkbox" style="align-self: center" class="form-check-input mt-0 mr-3" id="@message.Id" />
+                        <details class="card w-100 mb-0 palantir-card @gradientClass">
+                            <summary class="card-header text-dark d-flex justify-content-between align-items-center mb-0">
+                                <div class="form-check-label mb-0">
+                                    <label class="palantir-text" for="@message.Id">#@message.Id</label>
+                                    <label class="palantir-text palantir-title" for="@message.Id">@message.Title</label>
+                                </div>
+                                <div class="form-check-label mb-0">
+                                    <label class="form-check-label realm-label mb-0 palantir-text" for="@message.Id">@message.Realm</label>
+                                    <label> | </label>
+                                    <label class="palantir-text" for="@message.Id">@message.Status</label>
+                                </div>
+                            </summary>
+                            <div class="card-body text-dark mb-0">
+                                <p class="mb-0 palantir-text">@message.MessageBody</p>
+                            </div>
+                            <div class="card-footer palantir-text text-dark mb-0">
+                                <small class="palantir-text">ID: @message.Id</small><br />
+                                <small class="palantir-text">Realm: @message.Realm</small><br />
+                                <small class="palantir-text">Sent by: @message.Username</small><br />
+                                <small class="palantir-text">Urgency: @message.UrgencyRating</small><br />
+                                <small class="palantir-text">Date: @TimeZoneInfo.ConvertTimeFromUtc(message.CreatedAt.ToUniversalTime(), TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")).ToString("MM/dd/yyyy hh:mm tt")</small><br />
+                            </div>
+                        </details>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No Nova App Palantir Messages found.</p>
+            }
+        </div>
     </div>
 </div>
